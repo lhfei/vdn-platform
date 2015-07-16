@@ -1,0 +1,152 @@
+[{
+	text: "CDN 运行状况",
+	iconCls: "tree-trunk",
+    expanded: true,
+    children: [{
+    	id: "cdn/ipserverMonitor/forward.do",
+    	text: "IPServer 监控",
+    	iconCls: "tree-leaf",
+    	url: "cdn/ipserverMonitor/forward.do",
+    	leaf: true
+    },{
+    	id: "cdn/taskDispatch/forward.do",
+    	text: "任務分发监控",
+    	iconCls: "tree-leaf",
+    	url: "cdn/taskDispatch/forward.do",
+    	leaf: true
+    },{
+    	id: "cdn/nettopo/forward.do",
+    	text: "网络拓扑",
+    	iconCls: "tree-leaf",
+    	url: "cdn/nettopo/forward.do",
+    	leaf: true
+    },{
+    	id: "cdn/server/forward.do",
+    	text: "服务器管理",
+    	iconCls: "tree-leaf",
+    	url: "cdn/server/forward.do",
+    	leaf: true
+    },{
+    	id: "cdn/roomMonitor/forward.do",
+    	text: "机房监控",
+    	iconCls: "tree-leaf",
+    	url: "cdn/roomMonitor/forward.do",
+    	leaf: true
+    },{
+    	id: "cdn/serverRoomAudit/forward.do",
+    	text: "机房统计",
+    	iconCls: "tree-leaf",
+    	url: "cdn/serverRoomAudit/forward.do",
+    	leaf: true
+    },{
+    	id: "cdn/serverRoom/forward.do",
+    	text: "机房管理",
+    	iconCls: "tree-leaf",
+    	url: "cdn/serverRoom/forward.do",
+    	leaf: true
+    }]
+},{
+	text: "统计报表",
+	iconCls: "tree-trunk",
+    expanded: false,
+    children: [{
+    	id: "system/loadMenu.do",
+    	text: "任務工作台",
+    	iconCls: "tree-leaf",
+    	url: "workStation.do",
+    	leaf: true
+    },{
+    	id: "phoenixtv/taskList.do",
+    	text: "任務列表",
+    	iconCls: "tree-leaf",
+    	url: "phoenixtv/taskList.do",
+    	leaf: true
+    }]
+},{
+	text: "任务监控",
+	iconCls: "tree-trunk",
+    expanded: false,
+    children: [{
+        id: 'http://114.80.177.144:8088/cluster/apps',
+        text: 'HDFS 任务',
+        iconCls: "tree-leaf",
+        url: "processManager/history.do",
+        leaf: true
+    },{
+        id: 'http://114.80.177.144:8088/cluster',
+        text: 'YARN 任务',
+        iconCls: "tree-leaf",
+        url: "ifeng/videoList.do",
+        leaf: true
+    }]
+},{
+	text: "文件管理",
+	iconCls: "tree-trunk",
+    expanded: false,
+    children: [{
+        id: 'processManager/deploy.do',
+        text: 'HDFS 文件',
+        iconCls: "tree-leaf",
+        url: "processManager/deploy.do",
+        leaf: true
+    },{
+        id: 'http://114.80.177.144:50070/explorer.html',
+        text: '日志文件',
+        iconCls: "tree-leaf",
+        url: "http://114.80.177.144:50070/explorer.html",
+        leaf: true
+    }]
+}, {
+	text: 'IP 管理',
+	iconCls: "tree-trunk",
+    expanded: false,
+    children: [{
+    	id: 'ipController/aliIPCheck.do',
+    	text: 'IP阿里测',
+    	iconCls: "tree-leaf",
+        url: "ipController/aliIPCheck.do",
+        leaf: true
+    },{
+    	id: 'ipController/aliIPMerge.do',
+    	text: 'IP 校对',
+    	iconCls: "tree-leaf",
+        url: "ipController/aliIPMerge.do",
+        leaf: true
+    }]
+},{
+	text: 'IPServer 同步',
+	iconCls: "tree-trunk",
+    expanded: false,
+    children: [{
+    	id: 'ipController/ipImportReport.do',
+    	text: 'IP同步记录',
+    	iconCls: "tree-leaf",
+        url: "ipController/ipImportReport.do",
+        leaf: true
+    },{
+    	id: 'ipController/ipJournal.do',
+    	text: 'IPArea 状态记录',
+    	iconCls: "tree-leaf",
+        url: "ipController/ipJournal.do",
+        leaf: true
+    }]
+},{
+	text: '系统配置',
+	iconCls: "tree-trunk",
+    expanded: false,
+    children: [{
+    	id: 'configure/globalConf.do',
+    	text: '系统参数设置',
+    	iconCls: "tree-leaf",
+        url: "ipController/ipImportReport.do",
+        leaf: true
+    },{
+    	id: 'configure/globalUpdate.do',
+    	text: '系统变量',
+    	iconCls: "tree-leaf",
+        url: "configure/globalUpdate.do",
+        leaf: true
+    }]
+}]
+
+

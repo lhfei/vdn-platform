@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ifeng.vdn.dashboard.orm.mybatis.mapper.IPReportMapper">
+	
+	<cache />
+	
+	<select id="getIPFromIfeng" parameterType="ipModel" resultType="ipModel">
+		SELECT 
+		  `ID`,
+		  `IP`,
+		  `REGION`,
+		  `REGION_ID`,
+		  `CITY`,
+		  `CITY_ID`,
+		  `COUNTY`,
+		  `COUNTY_ID`,
+		  `COUNTRY`,
+		  `COUNTRY_ID`,
+		  `ISP`,
+		  `ISP_ID`,
+		  `DATA_STATUS`,
+		  `LATEST_TIME`,
+		  `CREATE_TIME` 
+		FROM
+		  `VDN_DASHBOARD`.`VDN_IFENG_IP_REPO` 
+		LIMIT #{start}, #{limit} ;
+
+	</select>
+</mapper>

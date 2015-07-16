@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ifeng.vdn.dashboard.orm.mybatis.mapper.CdnMapper">
+	
+	<!-- <cache /> -->
+
+	<insert id="create" parameterType="serverJournal">
+		INSERT INTO  `VDN_IPSERVER_JOURNAL` (
+		  `IP`,
+		  `LIVE_TOTAL`,
+		  `REQUEST_TOTAL`,
+		  `VIDEO_TOTAL`,
+		  `TOTAL`,
+		  `PLAY_WAY`,
+		  `CREATE_TIME`,
+		  `DATA_STATUS`,
+		  `LATEST_TIME`
+		) 
+		VALUES
+		  (
+		    #{ip},
+		    #{live_total},
+		    #{request_total},
+		    #{video_total},
+		    #{total},
+		    #{play_way},
+			#{create_time},
+			#{data_status},
+			#{latest_time}
+		  ) ;
+				
+	</insert>
+
+	<select id="read" parameterType="serverJournalModel" resultType="serverJournal">
+		SELECT 
+		  `ID`,
+		  `IP`,
+		  `LIVE_TOTAL`,
+		  `REQUEST_TOTAL`,
+		  `VIDEO_TOTAL`,		  
+		  `TOTAL`,
+		  `PLAY_WAY`,
+		  `CREATE_TIME`,
+		  `DATA_STATUS`,
+		  `LATEST_TIME` 
+		FROM
+		  `VDN_IPSERVER_JOURNAL`
+		  
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="ip != null and ip != ''">
+				`IP` = #{ip}
+			</if>
+		
+			<if test="start_time != null">
+				AND `CREATE_TIME` &gt;= #{start_time}
+			</if>
+			<if test="end_time != null">
+				AND `CREATE_TIME` &lt;= #{end_time}
+			</if> 
+		</trim>
+		  
+	</select>
+	
+	
+
+	<insert id="createServerRoom" parameterType="serverRoom">
+		INSERT INTO `vdn_dashboard`.`VDN_SERVER_ROOM` (
+		  `ROOM_NAME`,
+		  `ROOM_CODE`,
+		  `ROOM_STATUS`,
+		  `CREATE_TIME`,
+		  `DATA_STATUS`,
+		  `LATEST_TIME`
+		) 
+		VALUES
+		  (
+		    #{room_name},
+		    #{room_code},
+		    #{room_status},
+		    #{create_time},
+		    #{data_status},
+		    #{latest_time}
+		  ) ;
+				
+	</insert>
+		
+	<select id="getServerRoom" resultType="serverRoom" parameterType="serverRoomModel">
+		SELECT 
+		  `ID`,
+		  `ROOM_NAME`,
+		  `ROOM_CODE`,
+		  `ROOM_STATUS`,
+		  `CREATE_TIME`,
+		  `DATA_STATUS`,
+		  `LATEST_TIME` 
+		FROM
+		  `VDN_SERVER_ROOM` 
+		  
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="room_name != null and room_name != ''">
+				`ROOM_NAME` LIKE CONCAT('%', #{room_name}, '%')
+			</if>
+			
+			<if test="room_status != 999">
+				AND `ROOM_STATUS` = #{room_status}
+			</if>
+			
+			<if test="data_status != 999">
+				AND `DATA_STATUS` = #{data_status}
+			</if>				
+		</trim>
+		
+		ORDER BY `ROOM_NAME` ASC, `CREATE_TIME` DESC; 
+	</select>
+	
+	<select id="countServerRoom" resultType="int" parameterType="serverRoomModel">
+		SELECT COUNT(*)
+		  
+		FROM
+		  `VDN_SERVER_ROOM` 
+		  
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="room_name != null and room_name != ''">
+				`ROOM_NAME` LIKE CONCAT('%', #{room_name}, '%')
+			</if>
+			
+			<if test="room_status != 999">
+				AND `ROOM_STATUS` = #{room_status}
+			</if>
+			
+			<if test="data_status != 999">
+				AND `DATA_STATUS` = #{data_status}
+			</if>				
+		</trim>
+	</select>	
+	
+	<delete id="removeServerRoom" parameterType="serverRoom">
+		DELETE 
+		FROM
+		  `VDN_SERVER_ROOM` 
+		WHERE `ID` = #{id} 	
+	
+	</delete>
+	
+	<delete id="batchRemoveServerRoom" parameterType="list">
+		DELETE 
+		FROM
+		  `VDN_SERVER_ROOM` 
+		WHERE `ID` IN 
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			 #{id} 
+		</foreach>
+	</delete>
+	
+	<!-- ====== Operations for Server. ======= -->
+	<insert id="createServer" parameterType="serverBaseModel">
+		insert into `VDN_SERVER_BASE` (
+		  `ROOM_ID`,
+		  `INNER_IP`,
+		  `IP`,
+		  `SERVER_STATUS`,
+		  `LATEST_TIME`,
+		  `DATA_STATUS`,
+		  `CREATE_TIME`
+		) 
+		values
+		  (
+		  	#{room_id},
+		    #{inner_ip},
+		    #{ip},
+		    #{server_status},
+		    #{latest_time},
+		    #{data_status},
+		    #{create_time}
+		  ) ;	
+	
+	</insert>
+	
+	<select id="getServers" parameterType="serverBaseModel" resultType="serverBaseModel">
+		SELECT 
+		  s.`ID`,
+		  s.`ROOM_ID`,
+		  r.`ROOM_NAME`, 
+		  s.`INNER_IP`,
+		  s.`IP`,
+		  s.`SERVER_STATUS`,
+		  s.`LATEST_TIME`,
+		  s.`DATA_STATUS`,
+		  s.`CREATE_TIME` 
+				  
+		FROM
+		  `VDN_SERVER_BASE`	s
+		  	
+		  LEFT JOIN `vdn_dashboard`.`VDN_SERVER_ROOM` r 
+		
+    		ON s.`ROOM_ID` = r.`ID`   
+
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="room_id != null">
+				s.`ROOM_ID` = #{room_id}
+			</if>
+			
+			<if test="ip != null and ip != ''">
+				AND s.`IP` LIKE CONCAT('%', #{ip}, '%')
+			</if>
+			
+			<if test="inner_ip != null and inner_ip != ''">
+				AND s.`INNER_IP` LIKE CONCAT('%', #{inner_ip}, '%')
+			</if>
+			
+			<if test="server_status != 999">
+				AND s.`SERVER_STATUS` = #{server_status}
+			</if>
+			
+			<if test="data_status != 999">
+				AND s.`DATA_STATUS` = #{data_status}
+			</if>			
+		</trim>		
+		
+		ORDER BY `IP`, `INNER_IP`
+		
+		LIMIT #{start},  #{limit};
+	</select>
+	
+	<select id="countServers" parameterType="serverBaseModel" resultType="int">
+		SELECT COUNT(*) 
+				  
+		FROM
+		  `VDN_SERVER_BASE`	s
+
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="room_id != null">
+				s.`ROOM_ID` = #{room_id}
+			</if>
+			
+			<if test="ip != null and ip != ''">
+				AND s.`IP` LIKE CONCAT('%', #{ip}, '%')
+			</if>
+			
+			<if test="inner_ip != null and inner_ip != ''">
+				AND s.`INNER_IP` LIKE CONCAT('%', #{inner_ip}, '%')
+			</if>
+			
+			<if test="server_status != 999">
+				AND s.`SERVER_STATUS` = #{server_status}
+			</if>
+			
+			<if test="data_status != 999">
+				AND s.`DATA_STATUS` = #{data_status}
+			</if>			
+		</trim>		
+	</select>
+
+	<delete id="batchRemoveServers" parameterType="list">
+		DELETE 
+		FROM
+		  `VDN_SERVER_BASE`
+		WHERE `ID` IN 
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			 #{id} 
+		</foreach>
+	</delete>
+</mapper>

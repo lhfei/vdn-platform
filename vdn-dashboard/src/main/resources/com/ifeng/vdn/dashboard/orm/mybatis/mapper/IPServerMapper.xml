@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ifeng.vdn.dashboard.orm.mybatis.mapper.IPServerMapper">
+	
+	<cache />
+
+	<insert id="create" parameterType="serverJournal">
+		INSERT INTO  `VDN_IPSERVER_JOURNAL` (
+		  `IP`,
+		  `LIVE_TOTAL`,
+		  `REQUEST_TOTAL`,
+		  `VIDEO_TOTAL`,
+		  `TOTAL`,
+		  `PLAY_WAY`,
+		  `CREATE_TIME`,
+		  `DATA_STATUS`,
+		  `LATEST_TIME`
+		) 
+		VALUES
+		  (
+		    #{ip},
+		    #{live_total},
+		    #{request_total},
+		    #{video_total},
+		    #{total},
+		    #{play_way},
+			#{create_time},
+			#{data_status},
+			#{latest_time}
+		  ) ;
+				
+	</insert>
+
+	<select id="read" parameterType="serverJournalModel" resultType="serverJournal">
+		SELECT 
+		  `ID`,
+		  `IP`,
+		  `LIVE_TOTAL`,
+		  `REQUEST_TOTAL`,
+		  `VIDEO_TOTAL`,		  
+		  `TOTAL`,
+		  `PLAY_WAY`,
+		  `CREATE_TIME`,
+		  `DATA_STATUS`,
+		  `LATEST_TIME` 
+		FROM
+		  `VDN_IPSERVER_JOURNAL`
+		  
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="ip != null and ip != ''">
+				`IP` = #{ip}
+			</if>
+		
+			<if test="start_time != null">
+				AND `CREATE_TIME` &gt;= #{start_time}
+			</if>
+			<if test="end_time != null">
+				AND `CREATE_TIME` &lt;= #{end_time}
+			</if> 
+		</trim>
+		  
+	</select>
+
+</mapper>

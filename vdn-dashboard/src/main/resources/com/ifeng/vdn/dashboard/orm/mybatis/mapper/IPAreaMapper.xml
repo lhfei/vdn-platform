@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ifeng.vdn.dashboard.orm.mybatis.mapper.IPAreaMapper">
+	
+	<cache />
+
+	<insert id="createImportReport" parameterType="ipImportReport">
+		INSERT into `vdn_dashboard`.`VDN_IP_IMPORT_REPORT` (
+		  `TOTAL`,
+		  `SKIP`,
+		  `VALID`,
+		  `CREATE_TIME`,
+		  `LATEST_TIME`,
+		  `DATA_STATUS`
+		) 
+		VALUES
+		  (
+			#{total},
+			#{skip},
+			#{valid},
+			#{create_time},
+			#{latest_time},
+			#{data_status}
+		  ) ;
+		
+	</insert>
+	
+	<select id="getIPImportReport" parameterType="ipImportReportModel" resultType="ipImportReportModel">
+		SELECT 
+		  `ID`,
+		  `TOTAL`,
+		  `SKIP`,
+		  `VALID`,
+		  `CREATE_TIME`,
+		  `LATEST_TIME`,
+		  `DATA_STATUS` 
+		FROM
+		  `vdn_dashboard`.`VDN_IP_IMPORT_REPORT` 
+		LIMIT #{start}, #{limit} ;		
+	
+	</select>
+	
+	<insert id="importIP" parameterType="list">
+		INSERT INTO `vdn_dashboard`.`VDN_IFENG_IP_REPO` (
+		  `IP`,
+		  `REGION`,
+		  `REGION_ID`,
+		  `CITY`,
+		  `CITY_ID`,
+		  `COUNTY`,
+		  `COUNTY_ID`,
+		  `COUNTRY`,
+		  `COUNTRY_ID`,
+		  `ISP`,
+		  `ISP_ID`,
+		  `LATEST_TIME`,
+		  `CREATE_TIME`
+		) 
+		
+		VALUES
+		
+		<foreach collection="list" item="model" separator="," >
+			(
+			    #{model.ip},
+			    #{model.region},
+			    #{model.region_id},
+			    #{model.city},
+			    #{model.city_id},
+			    #{model.county},
+			    #{model.county_id},
+			    #{model.country},
+			    #{model.country_id},
+			    #{model.isp},
+			    #{model.isp_id},
+			    #{model.latest_time},
+			    #{model.create_time}
+			)
+		</foreach>
+	</insert>
+	
+	
+	<insert id="createIPJournal" parameterType="ipJournal">
+		INSERT INTO `vdn_dashboard`.`VDN_IP_JOURNAL` (
+		  `DIGEST`,
+		  `CREATE_TIME`,
+		  `LATEST_TIME`,
+		  `DATA_STATUS`
+		) 
+		VALUES
+		  (
+			#{digest},
+			#{create_time},
+			#{latest_time},
+			#{data_status}
+		  ) ;	
+	</insert>
+	
+	<select id="getIPJournal" parameterType="ipJournalModel" resultType="ipJournal">
+		SELECT 
+		  `ID`,
+		  `DIGEST`,
+		  `CREATE_TIME`,
+		  `LATEST_TIME`,
+		  `DATA_STATUS` 
+		FROM
+		  `vdn_dashboard`.`VDN_IP_JOURNAL` 
+		LIMIT #{start}, #{limit} ;		
+	
+	</select>
+	
+</mapper>
