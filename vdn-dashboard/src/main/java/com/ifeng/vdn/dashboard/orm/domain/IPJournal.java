@@ -15,6 +15,8 @@
  */
 package com.ifeng.vdn.dashboard.orm.domain;
 /**
+ * Mapping to <tt>VDN_IP_JOURNAL</tt>
+ * 
  * @version 1.0.0
  *
  * @author Hefei Li

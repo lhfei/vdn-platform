@@ -45,7 +45,11 @@
 			        },
 
 			        xAxis: {
-			            categories: ts
+			            categories: ts,
+			        
+			            labels: {
+			            	format: 'value: {%H:%i:s%}'
+			            }
 			        },
 
 			        series: [{

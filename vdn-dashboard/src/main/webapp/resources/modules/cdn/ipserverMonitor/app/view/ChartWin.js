@@ -28,6 +28,13 @@ Ext.define('ifeng.view.ChartWin', {
     	}]
     }],
     
+    listeners: {
+        close: function(panel, e) {
+    		var menu = parent.Ext.getCmp('menuPanel');
+    		menu.expand(true);
+    	},
+        scope: 'this'
+    },
     
     initComponent: function() {
         var me = this;

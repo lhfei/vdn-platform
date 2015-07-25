@@ -7,7 +7,7 @@
 	<cache />
 
 	<insert id="createImportReport" parameterType="ipImportReport">
-		INSERT into `vdn_dashboard`.`VDN_IP_IMPORT_REPORT` (
+		INSERT into `VDN_IP_IMPORT_REPORT` (
 		  `TOTAL`,
 		  `SKIP`,
 		  `VALID`,
@@ -37,13 +37,13 @@
 		  `LATEST_TIME`,
 		  `DATA_STATUS` 
 		FROM
-		  `vdn_dashboard`.`VDN_IP_IMPORT_REPORT` 
+		  `VDN_IP_IMPORT_REPORT` 
 		LIMIT #{start}, #{limit} ;		
 	
 	</select>
 	
 	<insert id="importIP" parameterType="list">
-		INSERT INTO `vdn_dashboard`.`VDN_IFENG_IP_REPO` (
+		INSERT INTO `VDN_IFENG_IP_REPO` (
 		  `IP`,
 		  `REGION`,
 		  `REGION_ID`,
@@ -82,7 +82,7 @@
 	
 	
 	<insert id="createIPJournal" parameterType="ipJournal">
-		INSERT INTO `vdn_dashboard`.`VDN_IP_JOURNAL` (
+		INSERT INTO `VDN_IP_JOURNAL` (
 		  `DIGEST`,
 		  `CREATE_TIME`,
 		  `LATEST_TIME`,
@@ -105,9 +105,25 @@
 		  `LATEST_TIME`,
 		  `DATA_STATUS` 
 		FROM
-		  `vdn_dashboard`.`VDN_IP_JOURNAL` 
+		  `VDN_IP_JOURNAL` 
 		LIMIT #{start}, #{limit} ;		
 	
+	</select>
+	
+	<select id="getIPJournalLatest" resultType="ipJournal">
+		SELECT 
+		  j.`ID`,
+		  j.`DIGEST`,
+		  j.`CREATE_TIME`,
+		  j.`LATEST_TIME`,
+		  j.`DATA_STATUS` 
+		FROM
+		  `VDN_IP_JOURNAL` j 
+		WHERE j.`CREATE_TIME` = 
+		  (SELECT 
+		    MAX(`CREATE_TIME`) 
+		  FROM
+		    `VDN_IP_JOURNAL`)
 	</select>
 	
 </mapper>

@@ -20,7 +20,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         <typeAlias type="com.ifeng.vdn.dashboard.orm.domain.IPImportReport" alias="ipImportReport" />
         <typeAlias type="com.ifeng.vdn.dashboard.orm.domain.ErrGroup" alias="errGroup" />
         
-        
+        <typeAlias type="com.ifeng.vdn.dashboard.web.model.AvlbMinutelyModel" alias="avlbMinutelyModel" />
+        <typeAlias type="com.ifeng.vdn.dashboard.web.model.AvlbDailyModel" alias="avlbDailyModel" />
         <typeAlias type="com.ifeng.vdn.dashboard.web.model.ServerBaseModel" alias="serverBaseModel" />
         <typeAlias type="com.ifeng.vdn.dashboard.web.model.ServerRoomModel" alias="serverRoomModel" />
         <typeAlias type="com.ifeng.vdn.dashboard.web.model.IPServerJournalModel" alias="serverJournalModel" />

@@ -32,4 +32,6 @@ public interface IPServerService {
 	void create(IPServerJournal serverJournal);
 	
 	List<IPServerJournal> read(IPServerJournalModel serverJournalModel);
+	
+	List<IPServerJournal> getJournalSummary(IPServerJournalModel serverJournalModel);
 }

@@ -75,6 +75,54 @@ public class IPAreaServiceImpl implements IPAreaService {
 	//private static final String localFile = "/home/cloudland/app_data/ipArea.txt";
 
 	@Override
+	public IPJournalModel checkIPAreaFile() {
+		Date date = new Date();
+		IPJournalModel result = new IPJournalModel();
+		
+		String checkSum = this.getIPAreaFileChecksum();
+		IPJournal last = ipAreaMapper.getIPJournalLatest();
+		
+		result.setCreate_time(date);
+		result.setDigest(checkSum);
+		result.setLatest_time(date);
+		
+		if(null == last){// first time check
+			IPJournal journal = new IPJournal();
+			journal.setCreate_time(date);
+			journal.setDigest(checkSum);
+			journal.setLatest_time(date);
+			
+			ipAreaMapper.createIPJournal(journal);
+			
+			result.setLastChecksum("");
+			result.setHasChanged(false);
+			
+		}else {
+			String lastSum = last.getDigest();
+			
+			result.setLatest_time(last.getCreate_time());
+			
+			if(lastSum.equals(checkSum)){// no changed
+				result.setHasChanged(false);
+				result.setLastChecksum(checkSum);
+				
+			}else {// has changed,
+				result.setLastChecksum(last.getDigest());
+				result.setHasChanged(true);
+				
+				IPJournal journal = new IPJournal();
+				journal.setCreate_time(date);
+				journal.setDigest(checkSum);
+				journal.setLatest_time(date);
+				
+				ipAreaMapper.createIPJournal(journal);
+			}
+		}
+		
+		return result;
+	}
+	
+	@Override
 	public InputStream getIPAreaFile() {
 		String ipServerURL = dashboardApplicationContext.getIPserverConfiguration().get(GlobalConstant.IPServerConfiguration.IPSERVER_URL.getKey());
 		InputStream in = null;
@@ -176,8 +224,8 @@ public class IPAreaServiceImpl implements IPAreaService {
 		InputStream in = null;
 		
 		try {
-			//in = getIPAreaFile();
-			in = getIPAreaFileFromLocal(true);
+			in = getIPAreaFile();
+			//in = getIPAreaFileFromLocal(true);
 			digest = FileChecksumGenerator.getChecksumByMD5(in);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -463,4 +511,5 @@ public class IPAreaServiceImpl implements IPAreaService {
 	
 	@Autowired
 	private DashboardApplicationContext dashboardApplicationContext;
+
 }

@@ -66,7 +66,7 @@ public class CdnController extends AbstractController {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 
-			return ExtJSReturn.mapError(FAILUE);
+			return ExtJSReturn.mapError(FAILURE);
 		}
 	}
 	
@@ -95,7 +95,7 @@ public class CdnController extends AbstractController {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			
-			return ExtJSReturn.mapError(FAILUE);
+			return ExtJSReturn.mapError(FAILURE);
 		}
 	}
 	
@@ -114,7 +114,7 @@ public class CdnController extends AbstractController {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 
-			return ExtJSReturn.mapError(FAILUE);
+			return ExtJSReturn.mapError(FAILURE);
 		}
 	}
 	
@@ -150,7 +150,7 @@ public class CdnController extends AbstractController {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			
-			return ExtJSReturn.mapError(FAILUE);
+			return ExtJSReturn.mapError(FAILURE);
 		}
 	}
 	

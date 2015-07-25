@@ -35,6 +35,21 @@ public class IPJournalModel extends AbstractPaginationModel {
 	public void setDigest(String digest) {
 		this.digest = digest;
 	}
+	public String getLastChecksum() {
+		return lastChecksum;
+	}
+	public void setLastChecksum(String lastChecksum) {
+		this.lastChecksum = lastChecksum;
+	}
+	public boolean isHasChanged() {
+		return hasChanged;
+	}
+	public void setHasChanged(boolean hasChanged) {
+		this.hasChanged = hasChanged;
+	}
+
 	private Long id;
 	private String digest;
+	private String lastChecksum;
+	private boolean hasChanged;
 }

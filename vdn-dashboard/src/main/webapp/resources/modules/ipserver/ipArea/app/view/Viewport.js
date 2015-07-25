@@ -14,5 +14,14 @@ Ext.define('ifeng.view.Viewport', {
         region: 'center',
         xtype: 'ipAreaGrid',
         split: false
+    },{
+    	id: 'infoPanel',
+    	itemId: '_infoPanel',
+    	xtype: 'infoPanel',
+    	region: 'east',
+    	width: 200,
+    	collapsible: true,
+    	collapsed: true,
+    	split: true
     }]
 });

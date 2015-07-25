@@ -49,8 +49,8 @@
 		  `VDN_IPSERVER_JOURNAL`
 		  
 		<trim prefix="WHERE" prefixOverrides="AND |OR ">
-			<if test="ip != null and ip != ''">
-				`IP` = #{ip}
+			<if test="ip != null and ip != '' and inner_ip != null and inner_ip != ''">
+				`IP` in (#{ip} , #{inner_ip})
 			</if>
 		
 			<if test="start_time != null">
@@ -62,5 +62,30 @@
 		</trim>
 		  
 	</select>
+	
+	<select id="getJournalSummary" parameterType="serverJournalModel" resultType="serverJournal">
+		SELECT 
+		  SUM(v.total) AS TOTAL,
+		  SUM(v.`REQUEST_TOTAL`) AS REQUEST_TOTAL,
+		  SUM(v.`LIVE_TOTAL`) AS LIVE_TOTAL,
+		  SUM(v.`VIDEO_TOTAL`) AS VIDEO_TOTAL,
+		  v.`CREATE_TIME` 
+		FROM
+		  `VDN_IPSERVER_JOURNAL` v 
+
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="start_time != null">
+				v.`CREATE_TIME` &gt;= #{start_time}
+			</if>
+			<if test="end_time != null">
+				AND v.`CREATE_TIME` &lt;= #{end_time}
+			</if> 
+		</trim>
+
+		GROUP BY v.`CREATE_TIME`
+		
+		ORDER BY v.`CREATE_TIME`
+	</select>
+	
 
 </mapper>

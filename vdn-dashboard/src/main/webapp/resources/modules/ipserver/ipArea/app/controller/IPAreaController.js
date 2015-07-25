@@ -5,6 +5,7 @@ Ext.require([
     'Ext.form.field.File',
     'Ext.form.field.Number',
     'Ext.form.Panel',
+    'Ext.LoadMask',
     'Ext.window.MessageBox'
 ]);
 
@@ -12,16 +13,14 @@ Ext.define('ifeng.controller.IPAreaController', {
 	extend: 'Ext.app.Controller',
 	stores: ['IPAreaStore'],
 	models: ['IPAreaModel'],
-	views: ['IPAreaGrid', 'SearchForm'],
+	views: ['IPAreaGrid', 'SearchForm', 'InfoPanel', 'ReportWin'],
 	refs: [
         {ref: 'ipAreaGrid', selector: 'ipAreaGrid'},
         {ref: 'ipAreaStore', selector: 'ipAreaStore'},
         {ref: 'pagingtoolbar', selector: 'pagingtoolbar'},
-        {ref: 'searchForm', selector: 'searchForm'}
+        {ref: 'searchForm', selector: 'searchForm'},
+        {ref: 'infoPanel', selector: 'infoPanel'}
 	],
-	
-	depth: 1,
-	historyURL: [],
 	
 	init: function() {
 		var me = this;
@@ -32,6 +31,10 @@ Ext.define('ifeng.controller.IPAreaController', {
 		this.control({
 			'viewport > ipAreaGrid': {
 				cellclick: this.editTask
+			},
+			
+			'viewport > ipAreaGrid button[action=doCheck]': {
+				click: this.doCheck
 			},
 			
 			'viewport > ipAreaGrid button[action=doImport]': {
@@ -51,6 +54,19 @@ Ext.define('ifeng.controller.IPAreaController', {
 			}
 			
 		});
+	},
+	
+	launch: function() {
+		var me = this;
+	    Ext.Ajax.on('beforerequest', this.showSpinner);
+	    Ext.Ajax.on('requestcomplete', this.hideSpinner);
+	    Ext.Ajax.on('requestexception', this.hideSpinner);
+	},
+	showSpinner: function(){
+		Ext.getBody().mask("Please Wait!..");
+	},
+	hideSpinner: function(){
+	    Ext.getBody().unmask();
 	},
 	
 	editTask: function(grid, td, cellIndex, record, tr, rowIndex, e, eOpts) {
@@ -73,6 +89,41 @@ Ext.define('ifeng.controller.IPAreaController', {
 		searchModel = searchForm.getValues();
 		
 		searchForm.collapse(Ext.Component.DIRECTION_TOP, true);
+	},
+	
+	doCheck: function(){
+		var me = this,
+			win,
+			infoPanel;
+		
+		// Basic mask:
+		var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"检测时间大概需要持续 30 秒, 请耐心等待..."});
+		myMask.show();
+		
+		Ext.Ajax.request({
+			url: '../iparea/checkIPAreaFile.do',
+			waitMsg: 'Loading ...',
+			method: 'get',
+			timeout: 300000,
+			success: function (response, opts){
+				var result = Ext.decode(response.responseText); 
+				infoPanel = me.getInfoPanel();
+				
+				infoPanel.expand(true);
+				infoPanel.loadRecord(result);
+				
+				myMask.hide();
+			},
+			failure: function(response, opts){
+				var result = Ext.decode(response.responseText); 
+				Ext.MessageBox.alert({
+					title: 'System Message',
+					msg: result.message
+				});
+				
+				myMask.hide();
+			}
+		});
 	},
 	
 	doProofread: function() {

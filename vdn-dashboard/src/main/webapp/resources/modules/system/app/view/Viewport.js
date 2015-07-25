@@ -24,6 +24,7 @@ Ext.define('Ifeng.view.Viewport', {
         //padding: '16 0 0 0 ',
         split:true
     }, {
+    	id: 'menuPanel',
     	itemId: '_west',
         region: 'west',
         xtype: 'menuView',

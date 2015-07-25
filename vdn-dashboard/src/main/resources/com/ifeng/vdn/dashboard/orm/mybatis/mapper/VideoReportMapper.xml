@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ifeng.vdn.dashboard.orm.mybatis.mapper.VideoReportMapper">
+	
+	<!-- <cache /> -->
+
+	<select id="getAvlbDaily" parameterType="avlbDailyModel" resultType="avlbDailyModel">
+		SELECT 
+		  N.`TOTAL` AS numerator,
+		  D.`TOTAL` AS denominator,
+		  D.`CT`,
+		  N.`TOTAL` / D.`TOTAL` AS avlb 
+		FROM
+		  (SELECT 
+		    a.* 
+		  FROM
+		    `VDN_AVLB_DAILY` a 
+		  WHERE a.`ERR` = '303000') N,
+		  (SELECT 
+		    b.* 
+		  FROM
+		    `VDN_AVLB_DAILY` b 
+		  WHERE b.`ERR` = '208000') D 
+		  
+		WHERE N.`CT` = D.`CT` 
+		
+		ORDER BY `CT` ASC
+	</select>
+
+	<select id="getAvlbMinutely" parameterType="avlbMinutelyModel" resultType="avlbMinutelyModel">
+		SELECT 
+		  N.`TOTAL` AS numerator,
+		  D.`TOTAL` AS denominator,
+		  N.`CT`,
+		  N.`TR`,
+		  N.`TOTAL` / D.`TOTAL` AS avlb 
+		FROM
+		  (SELECT 
+		    a.* 
+		  FROM
+		    `VDN_AVLB_MINUTELY` a 
+		  WHERE a.`CT` = #{ct}  
+		    AND a.`ERR` = #{nCode}) N,
+		  (SELECT 
+		    b.* 
+		  FROM
+		    `VDN_AVLB_MINUTELY` b 
+		  WHERE b.`CT` = #{ct} 
+		    AND b.`ERR` = #{dCode}) D 
+		WHERE N.`TR` = D.`TR` 
+		ORDER BY N.`TR` ASC 
+	</select>
+
+</mapper>

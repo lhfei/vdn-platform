@@ -15,7 +15,9 @@ Ext.define('ifeng.controller.MonitorController', {
 	
 	stores: ['IPServerStore', 'ServerStore', 'ServerRoomStore'],
 	models: ['IPServerModel', 'ServerModel', 'ServerRoomModel'],
-	views: ['MainPanel','SearchForm', 'ServerBrowser', 'InfoPanel', 'ChartPanel', 'ChartWin', 'ChartSearchForm'], //
+	views: ['MainPanel','SearchForm', 'ServerBrowser', 
+	        'InfoPanel', 'ChartPanel', 'ChartWin', 
+	        'ChartSearchForm'], //
 	refs: [
 	    {ref: 'mainPanel', selector: 'mainPanel'},
         {ref: 'searchForm', selector: 'searchForm'},
@@ -27,10 +29,13 @@ Ext.define('ifeng.controller.MonitorController', {
         
 	],
 	
+	summaryTitle: '汇总查询',
+	
 	init: function() {
 		var me = this;
+		
 		// attach 'beforeload' event into HWStore 
-		Ext.getStore('IPServerStore').addListener('beforeload', this.doBefore, this);
+		Ext.getStore('ServerStore').addListener('load', this.warpSummary, this);
 		
 		this.control({
 			'mainPanel > searchForm button[action=doSearch]': {
@@ -61,8 +66,21 @@ Ext.define('ifeng.controller.MonitorController', {
 		});
 	},
 	
-	doBefore: function(store, operation, eOpts) {
+	onLaunch: function() {
+		/*var win = this.getSummaryWin();
+		if(!win){
+			win = Ext.create('ifeng.view.SummaryWin');
+		}
+		win.show();*/
+	},
+	
+	warpSummary: function(store, operation, eOpts) {
+		var server = new Ext.create('ifeng.model.ServerModel');
+		server.data.ip = this.summaryTitle;
+		server.data.inner_ip = this.summaryTitle;
 		
+		server.data.room_name = this.summaryTitle;
+		store.insert(0, server)
 	},
 	
 	doSearch: function() {
@@ -107,7 +125,6 @@ Ext.define('ifeng.controller.MonitorController', {
         if (selected) {
         	mainPanel.expand(true);
         	infoPanel.updateLayout();
-        	
             me.getInfoPanel().loadRecord(selected);
         }
     },
@@ -118,7 +135,8 @@ Ext.define('ifeng.controller.MonitorController', {
     fireServerSelected: function() {
     	var me = this;
     	
-    	var searchForm,
+    	var url,
+    		searchForm,
 	    	searchModel,	//search form items.
 	    	mainPanel,
 	    	infoPanel,
@@ -127,27 +145,33 @@ Ext.define('ifeng.controller.MonitorController', {
 	    	params,
 	    	selectedServer;
     	
-    	
+    	params = new Object();
     	searchForm = me.getChartSearchForm();
-    	
-    	if(searchForm){
-    		params = new Object();
-    		searchModel = searchForm.getValues();
-    		params.startdt = searchModel.startdt;
-    		params.enddt = searchModel.enddt;
-    	}else {
-    		params = null;
-    	}
+    	mainPanel = me.getMainPanel();
+    	infoPanel = me.getInfoPanel();
+    	chartPanel = me.getChartPanel();
     	
     	selectedServer = me.getServerBrowser().selModel.getSelection()[0];
     	serverIp = selectedServer.data.ip;
     	
-        mainPanel = me.getMainPanel();
-        infoPanel = me.getInfoPanel();
-        chartPanel = me.getChartPanel();
+    	if(serverIp && serverIp == me.summaryTitle){
+    		url = '../../ipserver/getJournalSummary.do';
+    	}else {
+    		url = '../../ipserver/' +serverIp+'/read.do';
+    	}
+    	params.inner_ip = selectedServer.data.inner_ip;
+    	
+    	if(searchForm){
+    		searchModel = searchForm.getValues();
+    		params.startdt = searchModel.startdt;
+    		params.enddt = searchModel.enddt;
+    	}else {
+    		params.startdt = null;
+    		params.enddt = null;
+    	}
 		
 		j$.ajax({
-			url: '../../ipserver/' +serverIp+'/read.do',
+			url: url,
 			data: params,
 			success: function(response) {
 				
@@ -174,12 +198,11 @@ Ext.define('ifeng.controller.MonitorController', {
 			        xAxis: {
 			            categories: ts
 			        },
-
 			        series: [{
 			        	name: 'Total',
 			        	color: '#00FF00',
 			        	data: total
-			        },{
+			        }/*,{
 			        	name: '点播',
 			        	color: '#FF00CC',
 			        	data: request
@@ -187,9 +210,16 @@ Ext.define('ifeng.controller.MonitorController', {
 			        	name: '直播',
 			        	color: '#AA00FF',
 			        	data: live
-			        }]
+			        }, {
+			        	name: '长视频',
+			        	color: '#BB00FF',
+			        	data: live
+			        }*/]
 			        
 			    });
+				
+				var menu = parent.Ext.getCmp('menuPanel');
+				menu.collapse(Ext.Component.DIRECTION_LEFT, true);
 				
 				var win = me.getChartWin();
 				

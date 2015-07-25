@@ -8,7 +8,7 @@ Ext.define('ifeng.view.InfoPanel', {
     header: false,
     
     tpl: [
-        '<div class="details">',
+        '<div class="details" style="padding-top: 20px">',
             '<tpl for=".">',
                     (!Ext.isIE6? '<img src="../../resources/images/bigdata/sortable.png" />' : 
                     '<div style="width:74px;height:74px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'icons/sortable.png\')"></div>'),

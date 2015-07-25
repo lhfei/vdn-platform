@@ -46,20 +46,20 @@
     	leaf: true
     }]
 },{
-	text: "统计报表",
+	text: "视频统计图表",
 	iconCls: "tree-trunk",
     expanded: false,
     children: [{
-    	id: "system/loadMenu.do",
-    	text: "任務工作台",
+    	id: "video/daily/forward.do",
+    	text: "视频统计图表",
     	iconCls: "tree-leaf",
-    	url: "workStation.do",
+    	url: "video/daily/forward.do",
     	leaf: true
     },{
-    	id: "phoenixtv/taskList.do",
+    	id: "video/groupErr/forward.do",
     	text: "任務列表",
     	iconCls: "tree-leaf",
-    	url: "phoenixtv/taskList.do",
+    	url: "video/groupErr/forward.do",
     	leaf: true
     }]
 },{

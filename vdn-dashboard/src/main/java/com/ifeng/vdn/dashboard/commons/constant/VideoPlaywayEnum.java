@@ -20,7 +20,7 @@ package com.ifeng.vdn.dashboard.commons.constant;
  * <ul>
  * 	<li>\u76f4\u64ad, <em>0</em></li>
  * 	<li>\u70b9\u64ad, <em>1</em></li>
- * 	<li>\u5fae\u535a, <em>2</em></li>
+ * 	<li>\u957f\u89c6\u9891, <em>2</em></li>
  * </ul>
  * 
  * @version 1.0.0
@@ -41,7 +41,10 @@ public enum VideoPlaywayEnum implements AbstractDictEnum<Integer>{
 	 */
 	REQUEST("\u70b9\u64ad", 1),
 	
-	WEIBO("\u5fae\u535a", 2)
+	/**
+	 * \u957f\u89c6\u9891
+	 */
+	VIDEO("\u957f\u89c6\u9891", 2)
 	;
 	
 	VideoPlaywayEnum(String label, Integer code){

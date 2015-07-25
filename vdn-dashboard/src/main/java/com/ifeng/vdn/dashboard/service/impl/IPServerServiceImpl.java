@@ -60,9 +60,31 @@ public class IPServerServiceImpl implements IPServerService {
 		}else {
 			return new ArrayList<IPServerJournal>();
 		}
+	}
+	
+	@Override
+	public List<IPServerJournal> getJournalSummary(
+			IPServerJournalModel serverJournalModel) {
+		
+		if(serverJournalModel != null){
+			if(serverJournalModel.getStart_time() == null){
+				Calendar cal = GregorianCalendar.getInstance();
+				cal.set(Calendar.HOUR_OF_DAY, 0);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				cal.set(Calendar.MILLISECOND, 0);
+				
+				serverJournalModel.setStart_time(cal.getTime());
+			}
+			
+			return ipServerMapper.getJournalSummary(serverJournalModel);
+		}else {
+			return new ArrayList<IPServerJournal>();
+		}
 		
 	}
 	
 	@Autowired
 	private IPServerMapper ipServerMapper;
+
 }

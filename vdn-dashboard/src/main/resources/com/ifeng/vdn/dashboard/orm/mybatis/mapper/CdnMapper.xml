@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ifeng.vdn.dashboard.orm.mybatis.mapper.CdnMapper">
 	
-	<!-- <cache /> -->
+	<cache />
 
 	<insert id="create" parameterType="serverJournal">
 		INSERT INTO  `VDN_IPSERVER_JOURNAL` (
@@ -262,4 +262,5 @@
 			 #{id} 
 		</foreach>
 	</delete>
+	
 </mapper>

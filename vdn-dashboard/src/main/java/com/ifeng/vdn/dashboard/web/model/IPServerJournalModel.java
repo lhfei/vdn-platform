@@ -38,6 +38,12 @@ public class IPServerJournalModel extends AbstractPaginationModel {
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
+	public String getInner_ip() {
+		return inner_ip;
+	}
+	public void setInner_ip(String inner_ip) {
+		this.inner_ip = inner_ip;
+	}
 	public int getLive_total() {
 		return live_total;
 	}
@@ -77,6 +83,7 @@ public class IPServerJournalModel extends AbstractPaginationModel {
 	
 	private Long id;
 	private String ip;
+	private String inner_ip;
 	private int live_total;
 	private int request_total;
 	private int video_total;

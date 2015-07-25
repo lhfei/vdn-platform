@@ -31,6 +31,9 @@ import com.ifeng.vdn.dashboard.web.model.IPJournalModel;
  * @since Jun 30, 2015
  */
 public interface IPAreaService {
+	
+	IPJournalModel checkIPAreaFile();
+	
 	void createIPJournal(IPJournal journal);
 	
 	List<IPJournal> getIPJournal(IPJournalModel model);

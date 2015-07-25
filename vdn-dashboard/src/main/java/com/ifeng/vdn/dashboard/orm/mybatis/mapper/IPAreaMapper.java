@@ -32,6 +32,8 @@ import com.ifeng.vdn.dashboard.web.model.IPModel;
  */
 public interface IPAreaMapper {
 
+	IPJournal getIPJournalLatest();
+	
 	void importIP(List<IPModel> ipList);
 	
 	List<IPImportReport> getIPImportReport(IPImportReportModel model);

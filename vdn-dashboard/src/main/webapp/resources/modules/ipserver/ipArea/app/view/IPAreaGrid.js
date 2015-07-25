@@ -49,19 +49,28 @@ Ext.define('ifeng.view.IPAreaGrid', {
             emptyMsg: "No records to display"
         }];
 		
-		this.tbar = [{
+		this.tbar = [/*{
         	itemId: 'doImportButton',
         	xtype: 'button',
         	text: '导入IP',
         	tpl: '从IPServer IPArea.txt 文件导入IP.',
         	action: 'doImport',
             iconCls: 'icon-proofread'
-        },'-', {
+        },*/'-',{
+        	itemId: 'doCheckBtn',
+        	xtype: 'button',
+        	text: '检测',
+        	disabled: false,
+        	action: 'doCheck',
+        	tpl: '检测最新IPArea文件',
+            iconCls: 'icon-diff'
+        }, {
         	itemId: 'proofreadButton',
         	xtype: 'button',
         	text: '校对',
         	disabled: true,
         	action: 'doProofread',
+        	tpl: '',
             iconCls: 'icon-proofread'
         }]
 		

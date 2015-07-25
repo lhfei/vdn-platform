@@ -7,7 +7,7 @@
 	request.setAttribute("basePath", basePath);
 	request.setAttribute("bootstrapRoot", bootstrapRoot);
 	
-	request.setAttribute("globalTitle", "Jenkins CI: The Definitive Guide.");
+	request.setAttribute("globalTitle", "VDN Data Thinker");
 %>
 
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
