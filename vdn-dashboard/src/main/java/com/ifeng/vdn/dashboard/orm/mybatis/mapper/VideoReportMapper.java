@@ -31,5 +31,7 @@ public interface VideoReportMapper {
 
 	List<AvlbDailyModel> getAvlbDaily(AvlbDailyModel model);
 	
+	List<AvlbMinutelyModel> getAvlbMinutely2(AvlbMinutelyModel model);
+	
 	List<AvlbMinutelyModel> getAvlbMinutely(AvlbMinutelyModel model);
 }

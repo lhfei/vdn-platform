@@ -1,22 +1,40 @@
 Ext.define('ifeng.view.DailyWin', {
     extend: 'Ext.window.Window',
     alias: 'widget.dailyWin',
-
-    height: '',
+    
+    itemId: '_dailyWin',
+    
+    width: 680,
+    height: 400,
     minHeight: 250,
     minWidth: 400,
     title: '日统计报表',
     maximizable: true,
     maximized: true,
     
-    layout: 'fit',
+    layout: 'border',
     closeAction: 'hide',
     
+    tbar: ['->', '-', {
+    	type: 'button',
+    	text: '表格展示',
+    	iconCls: 'icon-grid',
+    	action: 'showAvlbGrid'
+    	
+    }, '-', j$('.highcharts-button')[0]],
     initComponent: function() {
         var me = this;
         Ext.apply(me, {
         	items: [{
-        		contentEl: 'chartContainer'
+        		region: 'center',
+        		contentEl: 'chartContainer',
+        		split: true
+        	},{
+        		xtype: 'dailyGrid',
+        		region: 'south',
+        		split: true,
+        		collapsed: true,
+        		collapseMode: 'mini'
         	}]
         });
         me.callParent(arguments);

@@ -16,8 +16,10 @@
 package com.ifeng.vdn.dashboard.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import com.ifeng.vdn.dashboard.web.model.AvlbMinutelyModel;
 
@@ -33,16 +35,24 @@ public final class VideoFilterAdapter {
 	public static AvlbMinutelyModel create(VideoReportType reportType, int range) {
 		AvlbMinutelyModel model = new AvlbMinutelyModel();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar cal = GregorianCalendar.getInstance();
-		String ct = sf.format(cal.getTime());
 		
-		cal.set(Calendar.DAY_OF_YEAR, cal.get(Calendar.DAY_OF_YEAR) - range);
 		
-		ct = sf.format(cal.getTime());
+		String ct = "";
+		List<String> daily = new ArrayList<String>();
+
+		for (int i = 0; i <= range; i++) {
+			Calendar cal = GregorianCalendar.getInstance();
+			ct = sf.format(cal.getTime());
+			cal.set(Calendar.DAY_OF_YEAR, cal.get(Calendar.DAY_OF_YEAR) - i);
+			ct = sf.format(cal.getTime());
+			
+			daily.add(ct);
+		}
 		
+		model.setRange(range);
 		model.setdCode(reportType.getdCode());
 		model.setnCode(reportType.getnCode());
-		model.setCt(ct);
+		model.setDaily(daily);
 
 		return model;
 	}

@@ -29,8 +29,8 @@
 		ORDER BY `CT` ASC
 	</select>
 
-	<select id="getAvlbMinutely" parameterType="avlbMinutelyModel" resultType="avlbMinutelyModel">
-		SELECT 
+	<select id="getAvlbMinutely2" parameterType="avlbMinutelyModel" resultType="avlbMinutelyModel">
+		SELECT DISTINCT
 		  N.`TOTAL` AS numerator,
 		  D.`TOTAL` AS denominator,
 		  N.`CT`,
@@ -41,16 +41,59 @@
 		    a.* 
 		  FROM
 		    `VDN_AVLB_MINUTELY` a 
-		  WHERE a.`CT` = #{ct}  
-		    AND a.`ERR` = #{nCode}) N,
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="nCode != null and nCode != ''">
+				a.`ERR` = #{nCode}
+			</if>
+			<if test="daily != null">
+				AND a.`CT` IN 
+				<foreach collection="daily" item="ct" open="(" separator="," close=")">
+					#{ct} 
+				</foreach>
+			</if>
+		</trim>			    
+		     ORDER BY a.`CT` DESC, a.`TR` ASC  ) N,
 		  (SELECT 
 		    b.* 
 		  FROM
 		    `VDN_AVLB_MINUTELY` b 
-		  WHERE b.`CT` = #{ct} 
-		    AND b.`ERR` = #{dCode}) D 
-		WHERE N.`TR` = D.`TR` 
-		ORDER BY N.`TR` ASC 
+		    
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="dCode != null and dCode != ''">
+				b.`ERR` = #{dCode}
+			</if>
+			<if test="daily != null">
+				AND b.`CT` IN 
+				<foreach collection="daily" item="ct" open="(" separator="," close=")">
+					#{ct} 
+				</foreach>
+			</if>
+		</trim>		    
+		    
+		    ORDER BY b.`CT` DESC, b.`TR` ASC) D 
+		WHERE N.`CT` = D.`CT` 
+		  AND N.`TR` = D.`TR` 
+		ORDER BY N.`CT` DESC, N.`TR` ASC 
 	</select>
 
+	<select id="getAvlbMinutely" parameterType="avlbMinutelyModel" resultType="avlbMinutelyModel">
+		SELECT 
+		  `NUMERATOR`,
+		  `DENOMINATOR`,
+		  `CT`,
+		  `TR`,
+		  `NUMERATOR`/`DENOMINATOR` AS `AVLB` 
+		FROM
+		  `VDN_AVLB_MINUTELY_REPORT`
+		  
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="daily != null">
+				`CT` IN 
+				<foreach collection="daily" item="ct" open="(" separator="," close=")">
+					#{ct} 
+				</foreach>
+			</if>
+		</trim>	
+		 ORDER BY `CT` DESC, `TR` ASC
+	</select>
 </mapper>

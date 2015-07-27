@@ -16,6 +16,7 @@
 package com.ifeng.vdn.dashboard.web.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @version 1.0.0
@@ -82,6 +83,12 @@ public abstract class AbstractAvlbReport implements Serializable {
 	public void setRange(int range) {
 		this.range = range;
 	}
+	public List<String> getDaily() {
+		return daily;
+	}
+	public void setDaily(List<String> daily) {
+		this.daily = daily;
+	}
 
 	private String err;
 	private int total;
@@ -93,4 +100,5 @@ public abstract class AbstractAvlbReport implements Serializable {
 	
 	private int type;
 	private int range;
+	private List<String> daily;
 }

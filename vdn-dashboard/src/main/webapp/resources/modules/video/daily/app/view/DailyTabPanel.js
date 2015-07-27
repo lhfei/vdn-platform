@@ -8,13 +8,16 @@ Ext.define('ifeng.view.DailyTabPanel', {
         Ext.applyIf(me, {
             items: [
                 {
+                	iconCls: 'icon-chart',
                     xtype: 'allPanel'
                 },
                 {
-                    xtype: 'documentaryPanel'
+                	iconCls: 'icon-video',
+                    xtype: 'newsreelPanel'
                 },
                 {
-                    xtype: 'newsreelPanel'
+                	iconCls: 'icon-documentary',
+                    xtype: 'documentaryPanel'
                 }
             ]
         });

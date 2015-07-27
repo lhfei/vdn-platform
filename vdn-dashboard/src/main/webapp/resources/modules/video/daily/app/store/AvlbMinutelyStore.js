@@ -6,6 +6,7 @@ Ext.define('ifeng.store.AvlbMinutelyStore', {
         'Ext.data.reader.Json'
     ],
 
+    autoLoad: false,
     constructor: function(cfg) {
         var me = this;
         cfg = cfg || {};

@@ -84,18 +84,19 @@ Ext.define('ifeng.view.AllFilter', {
                         {
                             xtype: 'form',
                             margin: 5,
-                            width: 90,
+                            width: 120,
                             header: false,
                             defaults: {
-                            	text: '查询报表'
+                            	text: '查询报表',
+                            	iconCls: 'icon-chart-line-36'
                             },
                             items: [
                                 {
                                     xtype: 'button',
-                                    handler: function(){
+                                    handler: function(){ // 可用性统计
                                     	var type = Ext.getCmp('a_gk').getValue()
                                     	var range = Ext.getCmp('a_gk_rng').getValue()
-                                    	ifeng.app.getController('DailyController').doCheck(type, range);
+                                    	ifeng.app.getController('DailyController').avlbCheck(type, range);
                                     }
                                 },
                                 {

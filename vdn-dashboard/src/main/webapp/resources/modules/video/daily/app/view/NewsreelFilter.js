@@ -84,10 +84,11 @@ Ext.define('ifeng.view.NewsreelFilter', {
                         {
                             xtype: 'form',
                             margin: 5,
-                            width: 90,
+                            width: 120,
                             header: false,
                             defaults: {
-                            	text: '查询报表'
+                            	text: '查询报表',
+                            	iconCls: 'icon-video'
                             },
                             items: [
                                 {

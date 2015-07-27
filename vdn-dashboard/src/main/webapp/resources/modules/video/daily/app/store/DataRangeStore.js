@@ -35,12 +35,12 @@ Ext.define('ifeng.store.DataRangeStore', {
                     value: 0
                 },
                 {
-                    name: '3日数据',
-                    value: 3
+                    name: '3日内数据',
+                    value: 2
                 },
                 {
-                    name: '7日数据',
-                    value: 7
+                    name: '7日内数据',
+                    value: 6
                 }
             ],
             proxy: {

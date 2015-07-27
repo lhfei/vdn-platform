@@ -3,14 +3,19 @@ var j$ = jQuery;
 Ext.define('ifeng.controller.DailyController', {
     extend: 'Ext.app.Controller',
 
+    type: -1,
+    range: -1,
+    
     models: [
         'AvlbDaily',
         'DataRangeModel',
+        'AvlbMinutely',
         'AuditType'
     ],
     stores: [
         'AvlbDailyStore',
         'DataRangeStore',
+        'AvlbMinutelyStore',
         'AuditTypeStore'
     ],
     views: [
@@ -52,7 +57,12 @@ Ext.define('ifeng.controller.DailyController', {
     		
     		'mainView > allPanel > allFilter > button[action=doCheck]': {
     			click: this.doCheck
+    		},
+    		
+    		'#_dailyWin button[action=showAvlbGrid]': {
+    			click: this.showAvlbGrid
     		}
+    		
     	});
     },
     
@@ -67,11 +77,13 @@ Ext.define('ifeng.controller.DailyController', {
     	}
     },
     
-    doCheck: function(type, range) {
+    avlbCheck: function(type, range) {
     	var me,
     		win;
     	
     	me = this;
+    	me.type = type;
+    	me.range = range;
     	
     	if(!win) {
     		win = Ext.create('ifeng.view.DailyWin');
@@ -81,82 +93,79 @@ Ext.define('ifeng.controller.DailyController', {
     		url: '../getAvlbMinutely.do?type='+type+'&range='+range,
     		method: 'get',
     		success: function(response) {
-    			var tr = [],
+    			var 
+    				tr_fully = [],
+    				tr = [],
 					avlb = [];
 			
 				j$.map(response.data, function(val, i){
+					tr_fully[i] = val.ct +' '+ val.tr
 					tr[i] = val.tr
 					avlb[i] = new Number(val.avlb) * 100;
 				});
 				
 				j$('#chartContainer').highcharts({
 			    	title: {
-		                text: 'Daily Report'
+		                text: '可用性分时统计'
 		            },
 			        chart: {
 			            type: 'line'
 			        },
-			        
 			        tooltip: {
 			        	valueDecimals: 2,
 			            pointFormat: '{series.name}: <b>{point.y}  </b><br/>',
 			            valueSuffix: ' %',
 			            shared: true
 			        },
-			        
 			        xAxis: {
 			            categories: tr
 			        },
 			        series: [{
 			        	lineWidth: 1,
-			        	name: 'Available',
+			        	name: '可用性',
 			        	data: avlb
-			        }]
-			        
+			        }],
+			        navigation: {
+			            buttonOptions: {
+			                enabled: false
+			            }
+			        }
 			    });
     		}
-    		
     	});
-    	
     	
     	win.show();
     },
     
-    doSearch: function() {
-    	j$.ajax({
-    		url: '../getAvlbDaily.do',
-    		method: 'get',
-    		success: function(response) {
-    			var ct = [],
-					avlb = [];
-			
-				j$.map(response.data, function(val, i){
-					ct[i] = val.ct
-					avlb[i] = val.avlb;
-				});
-				
-				j$('#chartContainer').highcharts({
-			    	title: {
-		                text: 'Daily Report'
-		            },
-			        chart: {
-			            type: 'line'
-			        },
-
-			        xAxis: {
-			            categories: ct
-			        },
-			        series: [{
-			        	name: 'Total',
-			        	color: '#00FF00',
-			        	data: avlb
-			        }]
-			        
-			    });
-    		}
-    		
-    	});
+    doCheck: function(type, range) {
+    	var me,
+    		win;
+    	
+    	me = this;
+    	me.type = type;
+    	me.range = range;
+    	
     },
     
+    doSearch: function() {
+
+    },
+    
+    showAvlbGrid: function() {
+    	var me,
+    		store,
+    		dailyGrid;
+    	
+    	me = this;
+    	store = this.getAvlbMinutelyStoreStore();
+    	dailyGrid = this.getDailyGrid();
+    	
+    	store.getProxy().setExtraParam('type', me.type);
+    	store.getProxy().setExtraParam('range', me.range);
+    	
+    	store.load();
+    	
+    	dailyGrid.expand(true);
+    }
 });
 
