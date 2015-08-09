@@ -66,6 +66,8 @@ public class ExtJSReturn {
 		
 		return modelMap;
 	}
+	
+	
 
 	public static Map<String, Object> mapOK(List<? extends Serializable> beans,
 			String nodeName) {
@@ -85,6 +87,23 @@ public class ExtJSReturn {
 	 */
 	public static Map<String, Object> mapOK(List<? extends Serializable> benas,
 			int total) {
+
+		Map<String, Object> modelMap = new HashMap<String, Object>(3);
+		modelMap.put(DEFAULT_TOTAL_NODE, total);
+		modelMap.put(DEFAULT_DATA_NODE, benas);
+		modelMap.put(DEFAULT_SUCCESS_NODE, true);
+
+		return modelMap;
+	}
+	
+	/**
+	 * Generates modelMap to return in the modelAndView
+	 * 
+	 * @param benas
+	 * @return
+	 */
+	public static Map<String, Object> mapOK(List<? extends Serializable> benas,
+			long total) {
 
 		Map<String, Object> modelMap = new HashMap<String, Object>(3);
 		modelMap.put(DEFAULT_TOTAL_NODE, total);

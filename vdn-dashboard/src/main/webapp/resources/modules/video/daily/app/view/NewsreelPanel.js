@@ -2,7 +2,7 @@ Ext.define('ifeng.view.NewsreelPanel', {
     extend: 'Ext.form.Panel',
     alias: 'widget.newsreelPanel',
 
-    bodyPadding: 10,
+    bodyPadding: 5,
     layout: 'border',
     title: '其他视频',
 

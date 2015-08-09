@@ -56,10 +56,10 @@
     	url: "video/daily/forward.do",
     	leaf: true
     },{
-    	id: "video/groupErr/forward.do",
-    	text: "任務列表",
+    	id: "video/agent/forward.do",
+    	text: "IP运营商统计",
     	iconCls: "tree-leaf",
-    	url: "video/groupErr/forward.do",
+    	url: "video/agent/forward.do",
     	leaf: true
     }]
 },{

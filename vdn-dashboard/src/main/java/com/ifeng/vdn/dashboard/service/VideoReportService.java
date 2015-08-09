@@ -18,7 +18,9 @@ package com.ifeng.vdn.dashboard.service;
 import java.util.List;
 
 import com.ifeng.vdn.dashboard.web.model.AvlbDailyModel;
+import com.ifeng.vdn.dashboard.web.model.AvlbMinutelyGridModel;
 import com.ifeng.vdn.dashboard.web.model.AvlbMinutelyModel;
+import com.ifeng.vdn.dashboard.web.model.FluentMinutelyModel;
 
 /**
  * @version 1.0.0
@@ -29,7 +31,16 @@ import com.ifeng.vdn.dashboard.web.model.AvlbMinutelyModel;
  */
 public interface VideoReportService {
 
+	List<AvlbDailyModel> getAvlb(AvlbMinutelyModel model);
+	
 	List<AvlbDailyModel> getAvlbDaily(AvlbDailyModel model);
 	
+	long getAvlbMinutelyTotal(AvlbMinutelyModel model);
+	
+	int getAvlbMinutelyForGridTotal(AvlbMinutelyGridModel model);
+	List<AvlbMinutelyGridModel> getAvlbMinutelyForGrid(AvlbMinutelyGridModel model);
+	
 	List<AvlbMinutelyModel> getAvlbMinutely(AvlbMinutelyModel model);
+	
+	List<FluentMinutelyModel> getFluentMinutely(FluentMinutelyModel model);
 }

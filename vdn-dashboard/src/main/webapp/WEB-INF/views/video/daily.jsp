@@ -30,6 +30,10 @@
 
 <body>
 
-	<div id="chartContainer" style="height: 100%" class="x-hide-display"></div>
+	<div id="avlbChart" style="height: 100%" ></div>
+	
+	<div id="fluentChart" style="height: 100%"></div>
+	
+	
 </body>
 </html>

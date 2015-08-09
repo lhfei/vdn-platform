@@ -2,7 +2,7 @@ Ext.define('ifeng.view.DocumentaryPanel', {
     extend: 'Ext.form.Panel',
     alias: 'widget.documentaryPanel',
 
-    bodyPadding: 10,
+    bodyPadding: 5,
     layout: 'border',
     title: '纪录片',
 

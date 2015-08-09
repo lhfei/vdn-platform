@@ -16,7 +16,13 @@
 package com.ifeng.vdn.dashboard.web.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @version 1.0.0
@@ -71,10 +77,10 @@ public abstract class AbstractAvlbReport implements Serializable {
 	public void setnCode(String nCode) {
 		this.nCode = nCode;
 	}
-	public int getType() {
+	public Integer getType() {
 		return type;
 	}
-	public void setType(int type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 	public int getRange() {
@@ -83,11 +89,63 @@ public abstract class AbstractAvlbReport implements Serializable {
 	public void setRange(int range) {
 		this.range = range;
 	}
+	
+	public String getIsp() {
+		return isp;
+	}
+	public void setIsp(String isp) {
+		this.isp = isp;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
 	public List<String> getDaily() {
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		String ct = "";
+		List<String> daily = new ArrayList<String>();
+
+		for (int i = 0; i <= range; i++) {
+			Calendar cal = GregorianCalendar.getInstance();
+			ct = sf.format(cal.getTime());
+			cal.set(Calendar.DAY_OF_YEAR, cal.get(Calendar.DAY_OF_YEAR) - i);
+			ct = sf.format(cal.getTime());
+			
+			daily.add(ct);
+		}
+		
 		return daily;
 	}
+	
 	public void setDaily(List<String> daily) {
 		this.daily = daily;
+	}
+
+	public Integer getStart() {
+		return start;
+	}
+	public void setStart(Integer start) {
+		this.start = start;
+	}
+	public Integer getPage() {
+		return page;
+	}
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+	public int getLimit() {
+		return limit;
+	}
+	public void setLimit(Integer limit) {
+		this.limit = limit;
 	}
 
 	private String err;
@@ -98,7 +156,17 @@ public abstract class AbstractAvlbReport implements Serializable {
 	private String dCode;		// 分母 code
 	private String nCode;		// 分子 code
 	
-	private int type;
+	private Integer type;
 	private int range;
+	
+	private String isp;
+	private String country;
+	private String city;
+	
+	private Integer start;
+	private Integer page;
+	private Integer limit = 10;
+	
+	@JsonIgnore
 	private List<String> daily;
 }

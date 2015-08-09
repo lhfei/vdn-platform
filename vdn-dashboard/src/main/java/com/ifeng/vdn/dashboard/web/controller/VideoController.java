@@ -27,12 +27,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ifeng.vdn.dashboard.service.RecordFilterAdapter;
 import com.ifeng.vdn.dashboard.service.VideoReportService;
 import com.ifeng.vdn.dashboard.service.impl.VideoFilterAdapter;
 import com.ifeng.vdn.dashboard.service.impl.VideoFilterAdapter.VideoReportType;
 import com.ifeng.vdn.dashboard.web.model.AvlbDailyModel;
+import com.ifeng.vdn.dashboard.web.model.AvlbMinutelyGridModel;
 import com.ifeng.vdn.dashboard.web.model.AvlbMinutelyModel;
 import com.ifeng.vdn.dashboard.web.model.ExtJSReturn;
+import com.ifeng.vdn.dashboard.web.model.FluentMinutelyModel;
 
 /**
  * @version 1.0.0
@@ -63,20 +66,94 @@ public class VideoController extends AbstractController {
 	
 	@RequestMapping("getAvlbMinutely")
 	public @ResponseBody Map<String, Object> getAvlbMinutely(
-			@RequestParam(value = "type", required = false) int type,
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "start", required = false) Integer start,
+			@RequestParam(value = "limit", required = false) Integer limit,
 			@RequestParam(value = "range", required = false) int range) {
 
 		AvlbMinutelyModel model = VideoFilterAdapter.create(VideoReportType.SPGK, range);
-		model.setType(type);
 		model.setRange(range);
+		model.setPage(page);
+		model.setStart(start);
+		model.setLimit(limit);
 		
 		List<AvlbMinutelyModel> list = new ArrayList<AvlbMinutelyModel>();
 
 		list = videoReportService.getAvlbMinutely(model);
+		long total = videoReportService.getAvlbMinutelyTotal(model);
 
+		return ExtJSReturn.mapOK(list, total);
+	}
+	
+	@RequestMapping("getAvlbMinutelyForGrid")
+	public @ResponseBody Map<String, Object> getAvlbMinutelyForGrid(
+			@RequestParam(value = "isp", required = false) String isp,
+			@RequestParam(value = "cat", required = false) String cat,
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "start", required = false) Integer start,
+			@RequestParam(value = "limit", required = false) Integer limit,
+			@RequestParam(value = "range", required = false) int range,
+			@RequestParam(value = "filter", required = false) String filters ) {
+
+		//AvlbMinutelyModel model = VideoFilterAdapter.create(VideoReportType.SPGK, range);
+		
+		AvlbMinutelyGridModel model = avlbFilterAdapter.adapter(filters);
+		model.setIsp(isp);
+		model.setCat(cat);
+		model.setPage(page);
+		model.setStart(start);
+		model.setLimit(limit);
+		
+		List<AvlbMinutelyGridModel> list = new ArrayList<AvlbMinutelyGridModel>();
+
+		list = videoReportService.getAvlbMinutelyForGrid(model);
+		int total = videoReportService.getAvlbMinutelyForGridTotal(model);
+
+		return ExtJSReturn.mapOK(list, total);
+	}
+	
+	@RequestMapping("getFluentMinutely")
+	public @ResponseBody Map<String, Object> getFluentMinutely(
+			@RequestParam(value = "type", required = false) int type,
+			@RequestParam(value = "range", required = false) int range) {
+
+		FluentMinutelyModel model = new FluentMinutelyModel();
+		model.setType(type);
+		model.setRange(range);
+		
+		List<FluentMinutelyModel> list = new ArrayList<FluentMinutelyModel>();
+
+		list = videoReportService.getFluentMinutely(model);
+
+		return ExtJSReturn.mapOK(list);
+	}
+	
+	@RequestMapping("getAvlb")
+	public @ResponseBody Map<String, Object> getAvlb(
+			@RequestParam(value = "isp", required = false) String isp,
+			@RequestParam(value = "country", required = false) String country,
+			@RequestParam(value = "city", required = false) String city,
+			@RequestParam(value = "category", required = false) String category,
+			@RequestParam(value = "range", required = false) int range) {
+		
+		AvlbMinutelyModel model = VideoFilterAdapter.create(VideoReportType.SPGK, range);
+		model.setCategory(category);
+		model.setRange(range);
+		model.setIsp(isp);
+		model.setCountry(country);
+		model.setCity(city);
+		
+		List<AvlbDailyModel> list = new ArrayList<AvlbDailyModel>();
+		
+		list = videoReportService.getAvlb(model);
+		
 		return ExtJSReturn.mapOK(list);
 	}
 	
 	@Autowired
 	private VideoReportService videoReportService;
+	
+	@Autowired
+	private RecordFilterAdapter<AvlbMinutelyGridModel> avlbFilterAdapter;
+
 }

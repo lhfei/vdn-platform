@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ifeng.vdn.dashboard.orm.mybatis.mapper.VideoReportMapper">
 	
-	<!-- <cache /> -->
+	<cache />
 
 	<select id="getAvlbDaily" parameterType="avlbDailyModel" resultType="avlbDailyModel">
 		SELECT 
@@ -95,5 +95,242 @@
 			</if>
 		</trim>	
 		 ORDER BY `CT` DESC, `TR` ASC
+		 
+		 LIMIT #{start}, #{limit}
 	</select>
+	
+	<select id="getAvlbMinutelyTotal" parameterType="avlbMinutelyModel" resultType="long">
+		SELECT COUNT(*) 
+		FROM
+		  `VDN_AVLB_MINUTELY_REPORT`
+		  
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="daily != null">
+				`CT` IN 
+				<foreach collection="daily" item="ct" open="(" separator="," close=")">
+					#{ct} 
+				</foreach>
+			</if>
+		</trim>		
+	</select>
+	
+	<select id="getFluentMinutely" parameterType="fluentMinutelyModel" resultType="fluentMinutelyModel">
+		select 
+		  `T0`,
+		  `T1`,
+		  `T2`,
+		  `T3`,
+		  `T4`,
+		  t1/t0 as k1,
+		  t2/t0 as k2,
+		  t3/t0 as k3,
+		  t4/t0 as k4,
+		  `CT`,
+		  `TR` 
+		from
+		  `VDN_FLUENT_MINUTEL_REPORT` 	
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="daily != null">
+				`CT` IN 
+				<foreach collection="daily" item="ct" open="(" separator="," close=")">
+					#{ct} 
+				</foreach>
+			</if>
+		</trim>	
+		 ORDER BY `CT` DESC, `TR` ASC	
+	</select>
+
+	<select id="getAvlb" parameterType="avlbMinutelyModel" resultType="avlbMinutelyModel">
+		SELECT a.isp, a.err, b.err, a.total AS numerator, b.total denominator, a.total/b.total as avlb, a.ct, a.tr FROM (SELECT v.`ERR`, v.`ISP`, v.`CT`, v.`TR`, SUM(v.`TOTAL`) AS total FROM `VDN_AVLB_MINUTELY_FULLY` v
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="nCode != null and nCode != ''">
+				v.`ERR` = #{nCode}
+			</if>
+			
+			<include refid="GETAVLB_WHERE_CONDITION" />								
+		</trim>			
+		
+		
+		GROUP BY v.`ERR`, v.`ISP`, v.`CT`, v.`TR`
+		
+		ORDER BY v.`CT` DESC, v.`TR` ASC) a
+		
+		INNER JOIN 
+		(SELECT v.`ERR`, v.`ISP`, v.`CT`, v.`TR`, SUM(v.`TOTAL`) AS total FROM `VDN_AVLB_MINUTELY_FULLY` v
+		
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="dCode != null and dCode != ''">
+				v.`ERR` = #{dCode}
+			</if>
+			
+			<include refid="GETAVLB_WHERE_CONDITION" />				
+		</trim>	
+		
+		GROUP BY v.`ERR`, v.`ISP`, v.`CT`, v.`TR`
+		
+		ORDER BY v.`CT` DESC, v.`TR` ASC) b
+		
+		ON a.ct = b.ct
+		AND a.tr= b.tr
+		AND a.isp = b.isp	
+	
+	</select>
+	
+	
+	
+	
+	<select id="getAvlbMinutelyForGrid"
+		parameterType="avlbMinutelyModel" resultType="avlbMinutelyGridModel"
+		useCache="true">
+		<!-- 
+		SELECT 
+		  v.ct,
+		  v.tr,
+		  SUM(v.a) AS a,
+		  SUM(v.`B`) AS b,
+		  SUM(v.`C`) AS c,
+		  SUM(v.`C2`) AS c2,
+		  SUM(v.`C3`) AS c3,
+		  SUM(v.`C4`) AS c4,
+		  SUM(v.`D`) AS d,
+		  SUM(v.`D2`) AS d2,
+		  SUM(v.`D3`) AS d3,
+		  SUM(v.`E`) AS e,
+		  SUM(v.`F`) AS f,
+		  SUM(v.`F2`) AS f2,
+		  SUM(v.`G`) AS g,
+		  SUM(v.`G2`) AS g2 
+		FROM
+		  `VDN_AVLB_MINUTELY_FULLY_REPORT` v 
+
+		GROUP BY v.ct, v.tr
+
+		ORDER BY `CT` DESC, `TR` ASC
+
+		LIMIT #{start}, #{limit} ;		
+		 -->
+
+		SELECT 
+		  `ISP`,
+		  `CT`,
+		  `TR`,
+		  `CAT`,
+		  `A`,
+		  `B`,
+		  `C`,
+		  `C2`,
+		  `C3`,
+		  `C4`,
+		  `D`,
+		  `D2`,
+		  `D3`,
+		  `E`,
+		  `F`,
+		  `F2`,
+		  `G`,
+		  `G2` 
+		FROM
+        	`VDN_AVLB_MINUTELY_FULLY_REPORT`
+        	
+        <include refid="GETAVLB_FRO_GRID_WHERE_CONDITION" /> 
+		
+		ORDER BY `CT` DESC, `TR` ASC
+
+		LIMIT #{start}, #{limit} ;		
+
+	</select>
+
+	<select id="getAvlbMinutelyForGridTotal" parameterType="avlbMinutelyModel" resultType="int">
+		SELECT 
+		  count(*) 
+		FROM
+		  `VDN_AVLB_MINUTELY_FULLY_REPORT`
+		  
+		  <include refid="GETAVLB_FRO_GRID_WHERE_CONDITION" />
+	</select>	
+	
+
+	<sql id="GETAVLB_WHERE_CONDITION">
+		<if test="isp != null and isp != ''">
+			AND v.`ISP` = #{isp}
+		</if>
+		<if test="country != null and country != ''">
+			AND v.`COUNTRY` like "%" #{country} "%"
+		</if>
+		<if test="city != null and city != ''">
+			AND v.`CITY` like "%" #{city} "%"
+		</if>
+		
+		<if test="category != null and category.length() == 2">
+			AND v.`CAT` like #{category} "%"
+		</if>
+		<if test="category != null and category.length() > 2">
+			AND v.`CAT` = #{category}
+		</if>
+					
+		<if test="daily != null">
+			AND v.`CT` IN 
+			<foreach collection="daily" item="ct" open="(" separator="," close=")">
+				#{ct} 
+			</foreach>
+		</if>	
+	</sql>
+	
+	<sql id="GETAVLB_FRO_GRID_WHERE_CONDITION">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="kaFilter != null and kaFilter != ''">
+				<![CDATA[b / a]]> 
+				
+				<choose>
+					<when test="kaFilter == 'lt'">
+						&lt;
+					</when>
+					<when test="kaFilter == 'eq'">
+						=
+					</when>
+					<when test="kaFilter == 'gt'">
+						&gt;
+					</when>
+				</choose>
+				
+				 #{ka}
+			</if>
+			<if test="kbFilter != null and kbFilter != ''">
+				AND <![CDATA[(1 - c / b)]]> 
+				<choose>
+					<when test="kbFilter == 'lt'">
+						&lt;
+					</when>
+					<when test="kbFilter == 'eq'">
+						=
+					</when>
+					<when test="kbFilter == 'gt'">
+						&gt;
+					</when>
+				</choose>
+
+				#{kb}
+			</if>
+			<if test="kcFilter != null and kcFilter != ''">
+				AND  <![CDATA[c / b]]> 
+				
+				<choose>
+					<when test="kcFilter == 'lt'">
+						&lt;
+					</when>
+					<when test="kcFilter == 'eq'">
+						=
+					</when>
+					<when test="kcFilter == 'gt'">
+						&gt;
+					</when>
+				</choose>
+				
+				#{kc}
+			</if>
+		</trim>
+		
+		
+	</sql>
+	
 </mapper>

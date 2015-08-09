@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ifeng.vdn.dashboard.orm.mybatis.mapper.BasicMapper">
+	
+	<cache />
+
+	<select id="readCombobox" parameterType="combobox" resultType="combobox">
+		SELECT 
+		  `ID` as id,
+		  `PID` as pId,
+		  `COMBO_LABEL` as comboLabel,
+		  `COMBO_CODE` as comboCode,
+		  `COMBO_KEY` as comboKey,
+		  `COMBO_DESC` as comboDesc 
+		FROM
+		  `VDN_COMBOBOX`
+		  
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="comboKey != null and comboKey != ''">
+				`COMBO_KEY` = #{comboKey}
+			</if>
+		
+			<if test="pId != null">
+				AND `PID` = #{pId}
+			</if>
+		</trim> 
+	</select>
+	
+	<insert id="importRegion" parameterType="list">
+		INSERT INTO `VDN_REGION_COMBO` (
+		  `PID`,
+		  `COMBO_LABEL`,
+		  `COMBO_CODE`,
+		  `COMBO_KEY`
+		)	
+		
+		VALUES
+		
+		<foreach collection="list" item="model" separator=",">
+			(
+				#{model.pId},
+				#{model.comboLabel},
+				#{model.comboCode},
+				#{model.comboKey}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="getRegion" parameterType="int" resultType="combobox">
+		SELECT 
+		  `ID` as id,
+		  `PID` as pId,
+		  `COMBO_LABEL` as comboLabel,
+		  `COMBO_CODE` as comboCode,
+		  `COMBO_KEY` as comboKey
+		FROM
+		  `VDN_REGION_COMBO` 	
+		  
+		WHERE `PID` = #{pId}
+		
+	</select>
+
+</mapper>

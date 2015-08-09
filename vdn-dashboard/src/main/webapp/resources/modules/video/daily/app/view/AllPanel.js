@@ -3,7 +3,7 @@ Ext.define('ifeng.view.AllPanel', {
     alias: 'widget.allPanel',
 
     layout: 'border',
-    bodyPadding: 10,
+    bodyPadding: 5,
     title: '全部',
 
     initComponent: function() {

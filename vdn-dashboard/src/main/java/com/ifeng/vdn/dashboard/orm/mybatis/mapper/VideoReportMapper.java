@@ -18,7 +18,9 @@ package com.ifeng.vdn.dashboard.orm.mybatis.mapper;
 import java.util.List;
 
 import com.ifeng.vdn.dashboard.web.model.AvlbDailyModel;
+import com.ifeng.vdn.dashboard.web.model.AvlbMinutelyGridModel;
 import com.ifeng.vdn.dashboard.web.model.AvlbMinutelyModel;
+import com.ifeng.vdn.dashboard.web.model.FluentMinutelyModel;
 
 /**
  * @version 1.0.0
@@ -29,9 +31,22 @@ import com.ifeng.vdn.dashboard.web.model.AvlbMinutelyModel;
  */
 public interface VideoReportMapper {
 
+	/**
+	 * 
+	 * @param model
+	 * @return
+	 */
+	List<AvlbDailyModel> getAvlb(AvlbMinutelyModel model);
+	
 	List<AvlbDailyModel> getAvlbDaily(AvlbDailyModel model);
 	
 	List<AvlbMinutelyModel> getAvlbMinutely2(AvlbMinutelyModel model);
 	
+	long getAvlbMinutelyTotal(AvlbMinutelyModel model);
 	List<AvlbMinutelyModel> getAvlbMinutely(AvlbMinutelyModel model);
+	
+	int getAvlbMinutelyForGridTotal(AvlbMinutelyGridModel model);
+	List<AvlbMinutelyGridModel> getAvlbMinutelyForGrid(AvlbMinutelyGridModel model);
+	
+	List<FluentMinutelyModel> getFluentMinutely(FluentMinutelyModel model);
 }

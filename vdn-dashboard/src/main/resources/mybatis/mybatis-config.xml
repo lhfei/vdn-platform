@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     </settings>
     <typeAliases>
     
-    
+    	<typeAlias type="com.ifeng.vdn.dashboard.orm.domain.Combobox" alias="combobox" />
     	<typeAlias type="com.ifeng.vdn.dashboard.orm.domain.ServerBase" alias="serverBase" />
     	<typeAlias type="com.ifeng.vdn.dashboard.orm.domain.ServerRoom" alias="serverRoom" />
     	<typeAlias type="com.ifeng.vdn.dashboard.orm.domain.IPServerJournal" alias="serverJournal" />
@@ -20,6 +20,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         <typeAlias type="com.ifeng.vdn.dashboard.orm.domain.IPImportReport" alias="ipImportReport" />
         <typeAlias type="com.ifeng.vdn.dashboard.orm.domain.ErrGroup" alias="errGroup" />
         
+        
+        <typeAlias type="com.ifeng.vdn.dashboard.web.model.AvlbMinutelyGridModel" alias="avlbMinutelyGridModel" />
+        <typeAlias type="com.ifeng.vdn.dashboard.web.model.FluentMinutelyModel" alias="fluentMinutelyModel" />
         <typeAlias type="com.ifeng.vdn.dashboard.web.model.AvlbMinutelyModel" alias="avlbMinutelyModel" />
         <typeAlias type="com.ifeng.vdn.dashboard.web.model.AvlbDailyModel" alias="avlbDailyModel" />
         <typeAlias type="com.ifeng.vdn.dashboard.web.model.ServerBaseModel" alias="serverBaseModel" />

@@ -39,6 +39,18 @@ public class AvlbMinutelyModel extends AbstractAvlbReport {
 		this.ct = ct;
 	}
 	
+	/**
+	 * @return
+	 * @see com.ifeng.vdn.dashboard.commons.constant.VType
+	 */
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 	private String tr;
 	private String ct;
+	private String category;
 }

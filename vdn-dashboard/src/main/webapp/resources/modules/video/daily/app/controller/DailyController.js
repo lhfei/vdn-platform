@@ -89,6 +89,8 @@ Ext.define('ifeng.controller.DailyController', {
     		win = Ext.create('ifeng.view.DailyWin');
     	}
     	
+    	win.show();
+    	
       	j$.ajax({
     		url: '../getAvlbMinutely.do?type='+type+'&range='+range,
     		method: 'get',
@@ -104,7 +106,7 @@ Ext.define('ifeng.controller.DailyController', {
 					avlb[i] = new Number(val.avlb) * 100;
 				});
 				
-				j$('#chartContainer').highcharts({
+				j$('#avlbChart').highcharts({
 			    	title: {
 		                text: '可用性分时统计'
 		            },
@@ -133,8 +135,66 @@ Ext.define('ifeng.controller.DailyController', {
 			    });
     		}
     	});
-    	
-    	win.show();
+      	
+      	j$.ajax({
+    		url: '../getFluentMinutely.do?type='+type+'&range='+range,
+    		method: 'get',
+    		success: function(response) {
+    			var tr = [],
+    				k1 = [],
+    				k2 = [],
+					k3 = [],
+					k4 = [];
+			
+				j$.map(response.data, function(val, i){
+					tr[i] = val.tr
+					k1[i] = new Number(val.k1) * 100;
+					k2[i] = new Number(val.k2) * 100;
+					k3[i] = new Number(val.k3) * 100;
+					k4[i] = new Number(val.k4) * 100;
+				});
+				
+				j$('#fluentChart').highcharts({
+			    	title: {
+		                text: '流畅度分时统计'
+		            },
+			        chart: {
+			            type: 'line'
+			        },
+			        tooltip: {
+			        	valueDecimals: 2,
+			            pointFormat: '{series.name}: <b>{point.y}  </b><br/>',
+			            valueSuffix: ' %',
+			            shared: true
+			        },
+			        xAxis: {
+			            categories: tr
+			        },
+			        series: [{
+			        	lineWidth: 1,
+			        	name: 'K1',
+			        	data: k1
+			        },{
+			        	lineWidth: 1,
+			        	name: 'K2',
+			        	data: k2
+			        },{
+			        	lineWidth: 1,
+			        	name: 'K3',
+			        	data: k3
+			        },{
+			        	lineWidth: 1,
+			        	name: 'K4',
+			        	data: k4
+			        }],
+			        navigation: {
+			            buttonOptions: {
+			                enabled: false
+			            }
+			        }
+			    });
+    		}
+    	});
     },
     
     doCheck: function(type, range) {
