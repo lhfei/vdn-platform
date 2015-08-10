@@ -16,6 +16,14 @@
 package com.ifeng.vdn.dashboard.web.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @version 1.0.0
@@ -26,6 +34,28 @@ import java.io.Serializable;
  */
 public class AvlbMinutelyGridModel extends AbstractPaginationModel implements Serializable {
 	private static final long serialVersionUID = 7552318548739096442L;
+	
+	public void adaptDaily(Date start, Date end) {
+		List<String> days = new ArrayList<String>();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");	
+		
+		if(start != null && end != null){
+			Calendar cal = GregorianCalendar.getInstance();
+			cal.setTime(start);
+			
+			while(start.before(end)){
+
+				days.add(sf.format(start));
+				
+				cal.add(Calendar.DAY_OF_MONTH, 1);
+				start = cal.getTime();
+			}
+			
+			days.add(sf.format(end));
+		}
+		
+		daily = days;
+	}
 	
 	public String getIsp() {
 		return isp;
@@ -56,6 +86,13 @@ public class AvlbMinutelyGridModel extends AbstractPaginationModel implements Se
 	}
 	public void setCat(String cat) {
 		this.cat = cat;
+	}
+	
+	public List<String> getDaily() {
+		return daily;
+	}
+	public void setDaily(List<String> daily) {
+		this.daily = daily;
 	}
 	public int getA() {
 		return a;
@@ -219,11 +256,14 @@ public class AvlbMinutelyGridModel extends AbstractPaginationModel implements Se
 	public void setKf3(double kf3) {
 		this.kf3 = kf3;
 	}
-	private String isp;
 	private String ispAlias;
+	private String isp;
 	private String ct;
 	private String tr;
 	private String cat;
+	
+	@JsonIgnore
+	private List<String> daily;
 	
 	private int a;		//total of 208000
 	private int b;		//total of 303000

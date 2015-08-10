@@ -328,6 +328,14 @@
 				
 				#{kc}
 			</if>
+			
+			<if test="daily != null">
+				AND `CT` IN 
+				<foreach collection="daily" item="ct" open="(" separator="," close=")">
+					#{ct} 
+				</foreach>
+			</if>
+			
 		</trim>
 		
 		

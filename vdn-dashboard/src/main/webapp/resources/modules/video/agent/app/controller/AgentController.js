@@ -55,6 +55,7 @@ Ext.define('ifeng.controller.AgentController', {
 	],
     
     init: function(application) {
+    	Ext.QuickTips.init();
     	var me = this;
     	
     	Ext.getStore('AvlbDailyStore').addListener('load', this.doAfter, this);
@@ -93,7 +94,12 @@ Ext.define('ifeng.controller.AgentController', {
     		
     		'#dailyGridCmp button[action=filteData]': {
     			click: this.filteData
+    		},
+    		
+    		'#dailyGridCmp button[action=exportData]': {
+    			click: this.exportData
     		}
+    		
     	});
     },
     
@@ -290,11 +296,42 @@ Ext.define('ifeng.controller.AgentController', {
     filteData: function() {
     	var me = this;
     	
+    	var gridStart,
+    		gridEnd;
+    	
     	store = me.getAvlbMinutelyGridStoreStore();
+    	
+    	gridStart = Ext.getCmp('gridStart');
+    	gridEnd = Ext.getCmp('gridEnd');
+    	
+    	if(gridStart && gridEnd){
+    		store.getProxy().setExtraParam('startDt', gridStart.getValue());
+    		store.getProxy().setExtraParam('endDt', gridEnd.getValue());
+    	}
     	
     	store.getProxy().setExtraParam('range', me.range);
     	
     	store.load();
+    },
+    
+    exportData: function() {
+    	var me,
+    		grid,
+    		selModel,
+    		data;
+    	
+    	me = this;
+    	grid = me.getDailyGrid();
+    	selModel = grid.getSelectionModel();
+    	data = selModel.getSelection();
+    	
+    	if(data && data.length == 1){
+    		var item = data[0].data;
+    		var tr = item.tr;
+    		tr = tr.replace(':', '')
+    		
+    		document.location.href =' http://114.80.177.136:50070/webhdfs/v1/user/cloudland/vdnlogs/input/' +item.ct+ '/'+tr+ '.sta.gz?op=OPEN';
+    	}
     }
     
 });

@@ -19,9 +19,11 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.ifeng.vdn.hdfs.service.HDFSService;
 
@@ -36,6 +38,12 @@ import com.ifeng.vdn.hdfs.service.HDFSService;
 @RequestMapping("hdfs")
 public class HDFSController extends AbstractController {
 
+	@RequestMapping("/{view}/forward")
+	public ModelAndView forward(@PathVariable("view")String view) {
+		ModelAndView mv = new ModelAndView("/hdfs/" +view);
+		return mv;
+	}
+	
 	@RequestMapping("/getListStatus")
 	public @ResponseBody  String getListStatus(@RequestParam(value="ops", required=false) String ops,
 			HttpSession session) {
@@ -52,6 +60,8 @@ public class HDFSController extends AbstractController {
 		
 		return json;
 	}
+	
+	
 	
 	@Autowired
 	private HDFSService hdfsService;

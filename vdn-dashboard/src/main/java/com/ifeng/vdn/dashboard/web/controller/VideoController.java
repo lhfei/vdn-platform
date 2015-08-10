@@ -16,10 +16,12 @@
 package com.ifeng.vdn.dashboard.web.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,11 +95,14 @@ public class VideoController extends AbstractController {
 			@RequestParam(value = "start", required = false) Integer start,
 			@RequestParam(value = "limit", required = false) Integer limit,
 			@RequestParam(value = "range", required = false) int range,
+			@RequestParam(value = "startDt", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDt,
+			@RequestParam(value = "endDt", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDt,
 			@RequestParam(value = "filter", required = false) String filters ) {
 
 		//AvlbMinutelyModel model = VideoFilterAdapter.create(VideoReportType.SPGK, range);
 		
 		AvlbMinutelyGridModel model = avlbFilterAdapter.adapter(filters);
+		model.adaptDaily(startDt, endDt);
 		model.setIsp(isp);
 		model.setCat(cat);
 		model.setPage(page);

@@ -11,7 +11,7 @@ Ext.define('hwork.store.FileStatusStore', {
         limitParam: false, //to remove param "limit"
         noCache: true, //to remove param "_dc"
         api: {
-        	read: '../hdfs/getListStatus.do'
+        	read: '../getListStatus.do'
         },
         reader: {
             type: 'json'/*,

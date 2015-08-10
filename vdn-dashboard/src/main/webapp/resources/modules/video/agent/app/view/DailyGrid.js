@@ -18,10 +18,25 @@ Ext.define('ifeng.view.DailyGrid', {
     emptyText: 'No Matching Records',
 
     height: 500,
+    
+    /*selModel: {
+    	  mode: 'SINGLE'
+    },*/
+    selType: 'checkboxmodel',
+    
     initComponent: function() {
         var me = this;
         
         Ext.QuickTips.init();
+        
+        me.selModel = Ext.create('Ext.selection.CheckboxModel', {
+        	mode: 'SINGLE',
+	        listeners: {
+	            selectionchange: function(sm, selections) {
+	                me.down('#exportDataBtn').setDisabled(selections.length === 0);
+	            }
+	        }
+	    });
         
         var filters = {
 	        ftype: 'filters',
@@ -43,10 +58,16 @@ Ext.define('ifeng.view.DailyGrid', {
                 
                 {
                 	xtype: 'datefield',
-                	fieldLabel: '查询日期'
+                	id: 'gridStart',
+                	fieldLabel: '查询日期',
+                	value: new Date(),
+                	format: 'Y-m-d'
                 },
                 {
-                	xtype: 'datefield'
+                	xtype: 'datefield',
+                	id: 'gridEnd',
+                	value: new Date(),
+                	format: 'Y-m-d'
                 },
                 
                 '-',
@@ -60,8 +81,11 @@ Ext.define('ifeng.view.DailyGrid', {
                 
                 {
                 	text: '导出',
+                	itemId: 'exportDataBtn',
                     action: 'exportData',
-                    iconCls: 'icon-excel'
+                    iconCls: 'icon-export',
+                    tooltip: '请选择需要导出的数据,为了保障服务的性能，一次只能导出一个时段(10分钟)的数据.',
+                    disabled: true
                 },
                 
                 '-'

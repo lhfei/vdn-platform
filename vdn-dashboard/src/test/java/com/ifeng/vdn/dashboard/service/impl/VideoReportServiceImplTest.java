@@ -15,6 +15,8 @@
  */
 package com.ifeng.vdn.dashboard.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +74,28 @@ public class VideoReportServiceImplTest extends BasicTestSuit {
 		for(AvlbMinutelyGridModel grid : list){
 			log.info("ka: {}, kb: {}, kc:{}, kc2: {}, kc3: {}", grid.getKa(), grid.getKb(), grid.getKc(), grid.getKc2(), grid.getKc3() );
 		}
+	}
+	
+	
+	@Test
+	public void adapterDaily() {
+		AvlbMinutelyGridModel model = new AvlbMinutelyGridModel();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		
+		try {
+			model.adaptDaily(sf.parse("2015-08-04"), sf.parse("2015-08-07"));
+			
+			List<String> days = model.getDaily();
+			
+			for(String day : days){
+				log.info("Day: {}", day);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	@Autowired
