@@ -81,13 +81,12 @@ public class AvlbMinutelyGridModel extends AbstractPaginationModel implements Se
 	public void setTr(String tr) {
 		this.tr = tr;
 	}
-	public String getCat() {
-		return cat;
+	public String getCategory() {
+		return category;
 	}
-	public void setCat(String cat) {
-		this.cat = cat;
+	public void setCategory(String category) {
+		this.category = category;
 	}
-	
 	public List<String> getDaily() {
 		return daily;
 	}
@@ -260,7 +259,7 @@ public class AvlbMinutelyGridModel extends AbstractPaginationModel implements Se
 	private String isp;
 	private String ct;
 	private String tr;
-	private String cat;
+	private String category;
 	
 	@JsonIgnore
 	private List<String> daily;
@@ -302,6 +301,8 @@ public class AvlbMinutelyGridModel extends AbstractPaginationModel implements Se
 	private String kaFilter;
 	private String kbFilter;
 	private String kcFilter;
+	
+	private int range;
 
 	public String getKaFilter() {
 		return kaFilter;
@@ -320,6 +321,14 @@ public class AvlbMinutelyGridModel extends AbstractPaginationModel implements Se
 	}
 	public void setKcFilter(String kcFilter) {
 		this.kcFilter = kcFilter;
+	}
+
+	public int getRange() {
+		return range;
+	}
+
+	public void setRange(int range) {
+		this.range = range;
 	}
 	
 } 

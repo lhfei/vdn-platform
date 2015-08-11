@@ -32,7 +32,7 @@ Ext.define('ifeng.view.AllFilter', {
                 	xtype: 'fieldset',
                 	padding: '5 5 5 5',
                 	collapsible: true,
-                	collapsed: true,
+                	collapsed: false,
                 	autoHeight: true,
                 	checkboxToggle: true,
                 	title: '明细数据',

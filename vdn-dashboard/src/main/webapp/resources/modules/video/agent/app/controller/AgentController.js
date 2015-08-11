@@ -10,7 +10,7 @@ Ext.define('ifeng.controller.AgentController', {
     country: '',
     city: '',
     
-    initSeries: [/*'移动', '联通', */'电信'],
+    initSeries: ['移动', '联通', '电信'],
     
     models: [
         'AvlbDaily',
@@ -41,7 +41,9 @@ Ext.define('ifeng.controller.AgentController', {
         'DailyWin',
         'DailyGrid',
         'AllPanel',
-        'AllFilter'
+        'AllFilter',
+        'SummaryPanel',
+        'SummaryForm'
     ],
     
     refs: [
@@ -50,13 +52,13 @@ Ext.define('ifeng.controller.AgentController', {
         {ref: 'dailyPanel', selector: 'dailyPanel'},
         {ref: 'dailyWin', selector: 'dailyWin'},
         {ref: 'searchForm', selector: 'searchForm'},
-        {ref: 'allFilter', selector: 'allFilter' }
-        
+        {ref: 'allFilter', selector: 'allFilter' },
+        {ref: 'summaryForm', selector: 'summaryForm' },
+        {ref: 'summaryPanel', selector: 'summaryPanel' }
 	],
     
     init: function(application) {
     	Ext.QuickTips.init();
-    	var me = this;
     	
     	Ext.getStore('AvlbDailyStore').addListener('load', this.doAfter, this);
     	
@@ -65,6 +67,10 @@ Ext.define('ifeng.controller.AgentController', {
     	Ext.getStore('AvlbMinutelyGridStore').addListener('beforeload', this.beforeLoadAvlbMinutelyGrid, this);
     	
     	this.control({
+    		'#summarySearchBtn': {
+    			click: this.searchSummary
+    		},
+    		
     		'#reDrawBtn' : {
     			click: this.reloadChart
     		},
@@ -88,7 +94,7 @@ Ext.define('ifeng.controller.AgentController', {
     		'#typeCombo': {
     			change: function(){
     				var type = Ext.getCmp('_typeCombo');
-    		    	me.type = type.getValue();   
+    		    	this.type = type.getValue();   
     			}
     		},
     		
@@ -105,9 +111,16 @@ Ext.define('ifeng.controller.AgentController', {
     
     onLaunch: function() {
     	var me = this;
+    	
+    	me.fetchView();
+    	
     	for(var i = 0; i< me.initSeries.length; i++) {
     		me.addSeriesByName(me.initSeries[i]);
     	}
+    },
+    
+    searchSummary: function() {
+    	this.fetchView();
     },
     
     reloadChart: function(){
@@ -207,7 +220,7 @@ Ext.define('ifeng.controller.AgentController', {
     						}],
     						navigation: {
     							buttonOptions: {
-    								enabled: false
+    								enabled: true
     							}
     						}
     					});
@@ -332,7 +345,169 @@ Ext.define('ifeng.controller.AgentController', {
     		
     		document.location.href =' http://114.80.177.136:50070/webhdfs/v1/user/cloudland/vdnlogs/input/' +item.ct+ '/'+tr+ '.sta.gz?op=OPEN';
     	}
-    }
+    },
     
+    // *****************************************************************
+    // **
+    // *****************************************************************
+    fetchView: function() {
+    	try{
+    		var me,
+    			range,
+	    		form;
+    		
+    		me = this;
+    		form = me.getSummaryForm();
+    		var values = form.getValues();
+    		
+    		range = values['dataRange'] || 1;
+    		category = values['summaryRadio'] || '';
+    		url = '../getAvlbSummary.do?range=' +range+ '&category=' +category;
+    		
+    		myMask.msg = '正在加载 视频概况汇总数据, 请稍后 ... ...';
+    		myMask.show();
+    		
+    		j$.ajax({
+    			url: url,
+    			success: function(response) {
+    				var tr = [],
+    					sumChart = [],
+	    				summary = [],
+    					fluent = [],
+    					incomplete = [];
+    				
+    				j$.map(response.data, function(val, i){
+    					tr[i] = val.tr;	//时间段
+    					sumChart[i] = new Number(val.ka) * 100;
+    					summary[i] = val.a
+    					fluent[i] = new Number(val.kb) * 100;
+    					incomplete[i] = new Number(val.ke) * 100
+    				});
+    				
+    				j$('#avlbSumChart').highcharts({
+						title: {
+							text: 'VDN 请求样本数统计概况'
+						},
+						chart: {
+							height: 300,
+							type: 'line'
+						},
+						tooltip: {
+							valueDecimals: 2,
+							pointFormat: '{series.name}: <b>{point.y}  </b><br/>',
+							valueSuffix: '%',
+							shared: true
+						},
+						xAxis: {
+							categories: tr
+						},
+						series: [{
+							lineWidth: 1,
+							name: '可用性',
+							data: sumChart
+						}],
+						navigation: {
+							buttonOptions: {
+								enabled: true
+							}
+						}
+					});   				
+    				j$('#vdnSummaryChart').highcharts({
+						title: {
+							text: 'VDN 请求样本数统计概况'
+						},
+						chart: {
+							height: 300,
+							type: 'line'
+						},
+						tooltip: {
+							valueDecimals: 0,
+							pointFormat: '{series.name}: <b>{point.y}  </b><br/>',
+							valueSuffix: '',
+							shared: true
+						},
+						xAxis: {
+							categories: tr
+						},
+						series: [{
+							lineWidth: 1,
+							name: '样本数',
+							data: summary
+						}],
+						navigation: {
+							buttonOptions: {
+								enabled: true
+							}
+						}
+					});
+    				
+    				j$('#fluentChart').highcharts({
+						title: {
+							text: 'VDN 流畅度统计概况'
+						},
+						chart: {
+							height: 300,
+							type: 'line'
+						},
+						tooltip: {
+							valueDecimals: 2,
+							pointFormat: '{series.name}: <b>{point.y}  </b><br/>',
+							valueSuffix: ' %',
+							shared: true
+						},
+						xAxis: {
+							categories: tr
+						},
+						series: [{
+							lineWidth: 1,
+							name: '流畅度',
+							data: fluent
+						}],
+						navigation: {
+							buttonOptions: {
+								enabled: true
+							}
+						}
+					});
+    				
+    				j$('#incompleteChart').highcharts({
+						title: {
+							text: '播放不完整率统计概况'
+						},
+						chart: {
+							height: 300,
+							type: 'line'
+						},
+						tooltip: {
+							valueDecimals: 2,
+							pointFormat: '{series.name}: <b>{point.y}  </b><br/>',
+							valueSuffix: ' %',
+							shared: true
+						},
+						xAxis: {
+							categories: tr
+						},
+						series: [{
+							lineWidth: 1,
+							name: '播放不完整率',
+							data: incomplete
+						}],
+						navigation: {
+							buttonOptions: {
+								enabled: true
+							}
+						}
+					});
+    				
+    				myMask.hide();
+    			},
+    			error: function (xhr, ajaxOptions, thrownError) {
+    				myMask.hide();
+    			}
+    		});
+    		
+    	}catch(e){myMask.hide();}
+    	
+    },    
 });
 

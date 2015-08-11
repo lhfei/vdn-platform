@@ -30,9 +30,22 @@
 
 <body>
 
+	<!-- VDN 可行性统计汇总 -->
 	<div id="avlbChart" style="height: 300px" ></div>
 	
-	<div id="fluentChart" style="height: 300px"></div>
+	
+	<!-- VDN 可用性分时统计概况 -->
+	<div id="avlbSumChart" ></div>
+	
+	<!-- VDN 请求样本数统计汇总 -->
+	<div id="vdnSummaryChart" ></div>
+	
+	<!-- VDN 流畅度统计汇总 -->
+	<div id="fluentChart" ></div>
+	
+	<!-- VDN 播放不完整统计汇总 -->
+	<div id="incompleteChart" ></div>
+	
 	
 	
 </body>

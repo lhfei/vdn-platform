@@ -48,5 +48,8 @@ public interface VideoReportMapper {
 	int getAvlbMinutelyForGridTotal(AvlbMinutelyGridModel model);
 	List<AvlbMinutelyGridModel> getAvlbMinutelyForGrid(AvlbMinutelyGridModel model);
 	
+	List<AvlbMinutelyGridModel> getAvlbSummary(AvlbMinutelyGridModel model);
+	
+	
 	List<FluentMinutelyModel> getFluentMinutely(FluentMinutelyModel model);
 }

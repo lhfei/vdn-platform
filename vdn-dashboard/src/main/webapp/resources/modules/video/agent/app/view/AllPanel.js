@@ -4,7 +4,7 @@ Ext.define('ifeng.view.AllPanel', {
 
     layout: 'border',
     bodyPadding: 5,
-    title: '全部',
+    title: '分类查看',
     header: false,
 
     initComponent: function() {

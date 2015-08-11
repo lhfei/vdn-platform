@@ -36,10 +36,10 @@ public abstract class AbstractRepository implements Serializable {
 	private static final long serialVersionUID = -4801508529518618330L;
 	
 	
-	public int getData_status() {
+	public Integer getData_status() {
 		return data_status;
 	}
-	public void setData_status(int data_status) {
+	public void setData_status(Integer data_status) {
 		this.data_status = data_status;
 	}
 	public Date getLatest_time() {
@@ -58,7 +58,7 @@ public abstract class AbstractRepository implements Serializable {
 		return serialVersionUID;
 	}
 	
-	private int data_status;
+	private Integer data_status;
 	
 	@JsonSerialize(using=JsonDateSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")

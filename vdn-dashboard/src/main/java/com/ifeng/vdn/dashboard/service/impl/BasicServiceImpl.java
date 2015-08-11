@@ -39,6 +39,7 @@ public class BasicServiceImpl implements BasicService {
 	@Override
 	public List<Combobox> readISP() {
 		Combobox model = new Combobox(ComboboxCategoryEnum.ISP);
+		model.setData_status(0);
 		List<Combobox> list = new ArrayList<Combobox>();
 		
 		list = readCombobox(model);

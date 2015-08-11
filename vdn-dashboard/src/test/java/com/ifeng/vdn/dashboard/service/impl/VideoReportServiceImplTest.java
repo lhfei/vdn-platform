@@ -76,6 +76,20 @@ public class VideoReportServiceImplTest extends BasicTestSuit {
 		}
 	}
 	
+	@Test
+	public void getAvlbSummary() {
+		List<AvlbMinutelyGridModel> list = new ArrayList<AvlbMinutelyGridModel>();
+		
+		AvlbMinutelyGridModel model = new AvlbMinutelyGridModel();
+		model.setRange(1);
+		list = videoReportService.getAvlbSummary(model);
+		
+		for(AvlbMinutelyGridModel grid : list){
+			log.info("208: {}, kb: {}, ke:{}", grid.getA(), grid.getKb(), grid.getKe());
+		}
+		
+	}
+	
 	
 	@Test
 	public void adapterDaily() {

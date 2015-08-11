@@ -14,7 +14,7 @@ Ext.define('ifeng.view.SearchForm', {
     
     catetory: '',
 
-    bodyPadding: 10,
+    bodyPadding: 5,
     collapsible: true,
     title: '查询',
     header: false,
@@ -150,7 +150,14 @@ Ext.define('ifeng.view.SearchForm', {
             	        	        }]
                     	        }]
                             }]                      	
-                        }
+                        }/*,{
+                        	title: '查看小图',
+                        	listeners: {
+                        		activate: function(tab){
+                        			ifeng.app.getController('AgentController').fetchView();
+                                }
+                        	}
+                        }*/
                     ]
                 }]
         	},{
@@ -158,6 +165,9 @@ Ext.define('ifeng.view.SearchForm', {
         		anchor: '100%',
         		autoHeight: true,
         		autoScroll: true,
+        		defaults: {
+        			padding: '5 5 5 5 '
+        		},
         		items: [{
         			xtype: 'gridcombobox',
         			id: 'ispCombo',
@@ -185,13 +195,21 @@ Ext.define('ifeng.view.SearchForm', {
         	    		frame: true,
         	    		autoScroll: true,
         	    		autoHeight: true,
-        	    		height: 500,
+        	    		//height: 200,
         	    		columns: [
         	    		    {header: '全选', xtype: 'rownumberer', width: 40, sortable: false, locked: true }, 
         	    	        {header: '运营商名称', dataIndex: 'comboLabel', flex: 1, align: 'center'}
         	    		]
         	    	},
-        		}]
+        		}/*,{
+                    xtype: 'button',
+                    text: '查看小图',
+                    itemId: 'fetchViewBtn',
+                    iconCls: 'icon-analytics',
+                    action: 'fetchView',
+                    width: 90,
+                    padding: '10 0 5 0 '
+                }*/]
         	},{
             	xtype: 'form',
             	header: false,

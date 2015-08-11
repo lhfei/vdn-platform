@@ -180,36 +180,7 @@
 	
 	
 	<select id="getAvlbMinutelyForGrid"
-		parameterType="avlbMinutelyModel" resultType="avlbMinutelyGridModel"
-		useCache="true">
-		<!-- 
-		SELECT 
-		  v.ct,
-		  v.tr,
-		  SUM(v.a) AS a,
-		  SUM(v.`B`) AS b,
-		  SUM(v.`C`) AS c,
-		  SUM(v.`C2`) AS c2,
-		  SUM(v.`C3`) AS c3,
-		  SUM(v.`C4`) AS c4,
-		  SUM(v.`D`) AS d,
-		  SUM(v.`D2`) AS d2,
-		  SUM(v.`D3`) AS d3,
-		  SUM(v.`E`) AS e,
-		  SUM(v.`F`) AS f,
-		  SUM(v.`F2`) AS f2,
-		  SUM(v.`G`) AS g,
-		  SUM(v.`G2`) AS g2 
-		FROM
-		  `VDN_AVLB_MINUTELY_FULLY_REPORT` v 
-
-		GROUP BY v.ct, v.tr
-
-		ORDER BY `CT` DESC, `TR` ASC
-
-		LIMIT #{start}, #{limit} ;		
-		 -->
-
+		parameterType="avlbMinutelyModel" resultType="avlbMinutelyGridModel" >
 		SELECT 
 		  `ISP`,
 		  `CT`,
@@ -239,7 +210,7 @@
 		LIMIT #{start}, #{limit} ;		
 
 	</select>
-
+	
 	<select id="getAvlbMinutelyForGridTotal" parameterType="avlbMinutelyModel" resultType="int">
 		SELECT 
 		  count(*) 
@@ -247,8 +218,26 @@
 		  `VDN_AVLB_MINUTELY_FULLY_REPORT`
 		  
 		  <include refid="GETAVLB_FRO_GRID_WHERE_CONDITION" />
+	</select>
+
+	<select id="getAvlbSummary" parameterType="avlbMinutelyModel" resultType="avlbMinutelyGridModel" >
+		SELECT 
+		  v.`CT`,
+		  v.`TR`,
+		  SUM(v.`A`) AS a,
+		  SUM(v.`B`) AS b,
+		  SUM(v.`C`) AS c,
+		  SUM(v.`E`) AS e 
+		FROM
+		  `VDN_AVLB_MINUTELY_FULLY_REPORT` v 
+		  
+		  <include refid="GETAVLB_FRO_GRID_WHERE_CONDITION" /> 
+		  
+		GROUP BY v.`CT`,
+		  v.`TR` 
+		ORDER BY v.`CT` DESC,
+		  v.tr ASC 	
 	</select>	
-	
 
 	<sql id="GETAVLB_WHERE_CONDITION">
 		<if test="isp != null and isp != ''">
@@ -329,16 +318,20 @@
 				#{kc}
 			</if>
 			
+			<if test="category != null and category.length() == 2">
+				AND v.`CAT` like #{category} "%"
+			</if>
+			<if test="category != null and category.length() > 2">
+				AND v.`CAT` = #{category}
+			</if>
+			
 			<if test="daily != null">
 				AND `CT` IN 
 				<foreach collection="daily" item="ct" open="(" separator="," close=")">
 					#{ct} 
 				</foreach>
 			</if>
-			
 		</trim>
-		
-		
 	</sql>
 	
 </mapper>

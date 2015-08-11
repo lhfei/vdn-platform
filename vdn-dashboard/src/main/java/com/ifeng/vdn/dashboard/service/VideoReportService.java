@@ -40,6 +40,8 @@ public interface VideoReportService {
 	int getAvlbMinutelyForGridTotal(AvlbMinutelyGridModel model);
 	List<AvlbMinutelyGridModel> getAvlbMinutelyForGrid(AvlbMinutelyGridModel model);
 	
+	List<AvlbMinutelyGridModel> getAvlbSummary(AvlbMinutelyGridModel model);
+	
 	List<AvlbMinutelyModel> getAvlbMinutely(AvlbMinutelyModel model);
 	
 	List<FluentMinutelyModel> getFluentMinutely(FluentMinutelyModel model);

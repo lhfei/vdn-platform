@@ -90,7 +90,7 @@ public class VideoController extends AbstractController {
 	@RequestMapping("getAvlbMinutelyForGrid")
 	public @ResponseBody Map<String, Object> getAvlbMinutelyForGrid(
 			@RequestParam(value = "isp", required = false) String isp,
-			@RequestParam(value = "cat", required = false) String cat,
+			@RequestParam(value = "category", required = false) String category,
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "start", required = false) Integer start,
 			@RequestParam(value = "limit", required = false) Integer limit,
@@ -104,7 +104,7 @@ public class VideoController extends AbstractController {
 		AvlbMinutelyGridModel model = avlbFilterAdapter.adapter(filters);
 		model.adaptDaily(startDt, endDt);
 		model.setIsp(isp);
-		model.setCat(cat);
+		model.setCategory(category);
 		model.setPage(page);
 		model.setStart(start);
 		model.setLimit(limit);
@@ -113,8 +113,31 @@ public class VideoController extends AbstractController {
 
 		list = videoReportService.getAvlbMinutelyForGrid(model);
 		int total = videoReportService.getAvlbMinutelyForGridTotal(model);
-
+		
 		return ExtJSReturn.mapOK(list, total);
+	}
+	
+	@RequestMapping("getAvlbSummary")
+	public @ResponseBody Map<String, Object> getAvlbSummary(
+			@RequestParam(value = "isp", required = false) String isp,
+			@RequestParam(value = "category", required = false) String category,
+			@RequestParam(value = "range", required = false) int range,
+			@RequestParam(value = "startDt", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDt,
+			@RequestParam(value = "endDt", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDt ) {
+
+		//AvlbMinutelyModel model = VideoFilterAdapter.create(VideoReportType.SPGK, range);
+		
+		AvlbMinutelyGridModel model = new AvlbMinutelyGridModel();
+		model.adaptDaily(startDt, endDt);
+		model.setIsp(isp);
+		model.setCategory(category);;
+		model.setRange(range);
+		
+		List<AvlbMinutelyGridModel> list = new ArrayList<AvlbMinutelyGridModel>();
+
+		list = videoReportService.getAvlbSummary(model);
+		
+		return ExtJSReturn.mapOK(list);
 	}
 	
 	@RequestMapping("getFluentMinutely")

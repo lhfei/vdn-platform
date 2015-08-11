@@ -3,57 +3,51 @@ Ext.define('ifeng.view.DailyWin', {
     alias: 'widget.dailyWin',
     
     itemId: '_dailyWin',
-    width: 680,
-    height: 400,
+    width: '97%',
+    height: 600,
     minHeight: 250,
     minWidth: 400,
     title: '日统计报表',
     maximizable: true,
-    maximized: true,
-    autoScroll: false,
-    padding: '0 5 5 5',
-    layout: 'border',
+    maximized: false,
+    autoScroll: true,
+    bodyPadding: '5 5 5 5',
     closeAction: 'hide',
+    layout: 'column',
     
-    tbar: ['->', '-', {
+    /*tbar: ['->', '-', {
     	type: 'button',
     	text: '表格展示',
     	iconCls: 'icon-grid',
     	action: 'showAvlbGrid'
     	
-    }, '-', j$('.highcharts-button')[0]],
+    }, '-', j$('.highcharts-button')[0]],*/
+    
     initComponent: function() {
         var me = this;
         Ext.apply(me, {
+        	
         	items: [{
-        		xtype: 'form',
-        		region: 'center',
-        		layout: 'column',
-        		header: false,
-        		split: true,
+        		columnWidth: 1,
+        		defaults: {
+        			xtype: 'fieldset',
+        			layout: 'fit',
+        			padding: '5 5 5 5',
+        			collapsible: true,
+        			autoScroll: true,
+        			height: 320
+        		},
+        		
         		items: [{
-        			xtype: 'fieldset',
-        			columnWidth: 1,
-                    padding: '0 5 5 5',
-                    title: '可用性分时统计',
-                    autoHeight: true,
-                    collapsible: true,
-                    collapsed: false,
-                    contentEl: 'avlbChart'
+        			title: '流畅度分时概况',
+        			items: [{contentEl: 'fluentChart'}]
         		},{
-        			xtype: 'fieldset',
-        			columnWidth: 1,
-                    padding: '0 5 5 5',
-                    title: '流畅度分时统计',
-                    collapsible: true,
-                    contentEl: 'fluentChart'
+        			title: 'VDN 请求样本数概况',
+        			items: [{contentEl: 'vdnSummaryChart'}]
+        		},{
+        			title: '播放不完整率概况',
+        			items: [{contentEl: 'incompleteChart'}]
         		}]
-        	},{
-        		xtype: 'dailyGrid',
-        		region: 'south',
-        		split: true,
-        		collapsed: true,
-        		collapseMode: 'mini'
         	}]
         });
         me.callParent(arguments);

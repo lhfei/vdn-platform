@@ -25,6 +25,10 @@
 			<if test="pId != null">
 				AND `PID` = #{pId}
 			</if>
+			
+			<if test="data_status != null">
+				AND `DATA_STATUS` = #{data_status}
+			</if>
 		</trim> 
 	</select>
 	
